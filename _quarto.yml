@@ -1,21 +1,23 @@
-project: 
+project:
   type: website
-  
-website: 
+
+website:
   page-navigation: true
-  title: "Making sharable documents with Quarto" 
-  site-url: "https://openscapes.github.io/quarto-website-tutorial" 
-  repo-url: https://github.com/openscapes/quarto-website-tutorial 
+  site-url: "https://openscapes.github.io/quarto-website-tutorial"
+  repo-url: "https://github.com/openscapes/quarto-website-tutorial"
   repo-actions: [edit, issue]
-  
-  page-footer:
-    right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
-    left: "&copy; CC-By Openscapes, 2024"
-    
-  sidebar:
-    logo: "images/openscapes_hex.png"
-    pinned: true
-    align: center
+
+  navbar:
+    search: true
+    left:
+      - href: index.qmd
+        text: Who Catches Mantas?
+
+      - text: Research
+        href: Research.qmd
+
+      - text: About
+        href: About.qmd
     tools: 
       - icon: globe
         href: https://openscapes.org
@@ -23,37 +25,20 @@ website:
       - icon: github
         href: https://github.com/openscapes/quarto-website-tutorial
         text: "Quarto website tutorial"
-      - icon: twitter
-        href: https://twitter.com/openscapes
-        text: "Openscapes Twitter"         
+        
 
-    style: "docked"
-    search: true
-    collapse-level: 1
-    contents:
-      - href: index.qmd
-        text: Welcome
-      - explore.qmd
-      - section: quarto-workflows/index.qmd
-        contents: 
-          - quarto-workflows/browser.md
-          - quarto-workflows/rstudio.qmd
-          - quarto-workflows/jupyter.md 
-      - learning-more.qmd
-      - href: transition-from-rmarkdown.qmd
-        text: Transition from Rmd
-
+  page-footer:
+    right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
+    left: "&copy; CC-By Openscapes, 2024"
 
 format:
   html:
-    theme: cosmo
+    theme: cosmic
+    css: assets/custom.css
     code-copy: true
     code-overflow: wrap
-    toc: true
-
+    toc: false
 
 filters:
   - include-files.lua
   - quarto
-
-  

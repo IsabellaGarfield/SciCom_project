@@ -1,47 +1,179 @@
 ---
-title: "Making shareable documents with Quarto"
-subtitle: "Create open-source tutorials, onboarding docs, and much more"
+title: "Who catches Mantas?"
+subtitle: "Variation in manta ray bycatch within the Eastern Pacific Ocean (EPO) tuna purse seine fishery"
+
+format:
+  html:
+    include-in-header:
+      text: |
+        <script src="https://d3js.org/d3.v7.min.js"></script>
+page-layout: full
 ---
+::: {.hero}
 
-## COMMIT CHECK
+<div class="hero-image"></div>
+
+<div class="hero-content">
+
+# Who Catches Mantas?
+
+## Understanding individual variation in manta and devil ray bycatch in the eastern Pacific tuna fishery
+Photo credit: TUNACONS
+
+</div>
+
+:::
 
 
-It's possible to create beautiful documentation to share online with [Quarto](https://quarto.org) that auto-updates with [GitHub](http://github.com). This is very new and incredibly cool. This tutorial is an example of a quarto website --- it is a really powerful way to create and share your work. You can communicate about science using the same reproducible workflow you and/or your colleagues use for analyses, whether or not you write code.
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
+a/\
 
-Creating websites with Quarto can be done without knowing R, Python or HTML, CSS, etc, and that's where we'll start. However, Quarto integrates with these tools so you can make your websites as complex and beautiful as you like as you see examples and reuse and remix from others in the open community. This tutorial borrows heavily from a lot of great tutorials and resources you should check out too -- there are links throughout.
+Fishing fleets are often treated as homogeneous. However, variation in operational configurations and fisher behavior can contribute to heterogeneity in efficiency and sustainability outcomes. Incidental catch, or “bycatch”, is a key sustainability concern for fisheries management and represents a global threat to vulnerable marine species. Understanding drivers of bycatch variation is crucial for informing effective bycatch reduction practices, but can be difficult to study for rare-event bycatch species when observer data are too limited to capture sufficient variation. 
 
-## What is Quarto?
+In this study, we use the Eastern Pacific Ocean (EPO) tuna purse seine fishery as a case study to model fine-scale anthropogenic drivers of bycatch variation in a rare-event bycatch species, leveraging the fishery’s 100% observer coverage spanning 2005 - 2025. We use generalized additive mixed models to quantify the relative contributions of gear-, vessel-, and skipper-level variation to bycatch variability in manta and devil rays (mobulids), a pelagic genus considered vulnerable to bycatch in tuna purse seine fisheries. 
 
-Quarto helps you have your ideas and your code in one place, and present it in a beautiful way. 
+After standardizing spatiotemporal predictors of mobulid capture, we find that variability between skippers explains a higher proportion of mobulid bycatch probability than variability between vessel and gear factors, indicating that individual experiences, perceptions, and knowledge may play an important role in bycatch outcomes. Further, we find that low-bycatch skippers typically maintain higher target catch efficiency than high-bycatch skippers, suggesting that mobulid bycatch could be reduced without compromising target catch. 
 
-**Quarto unifies and extends the RMarkdown ecosystem** - it unifies by combining the functionality of R Markdown, bookdown, distill, xaringian, etc into a single consistent system. And it extends in several ways: all features are possible beyond R too, including Python and Javascript. It also has more “guardrails”: accessibility and inclusion are centered in the design. Quarto is for people who love RMarkdown, and it's for people who have never used RMarkdown. 
- 
+Our findings highlight the importance of considering both operational drivers of bycatch and individual variation in fisher behavior and fishing strategies as potential opportunities for bycatch mitigation.
 
-The ability for Quarto to streamline collaboration has been so cool and important for our [NASA Openscapes](https://nasa-openscapes.github.io/) project. Quarto has been a common place for us to collaborate - across R and Python languages and coding expertise. 
+## Catch trends
+Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations. 
+```{r}
+#| echo: false
 
-## What is this tutorial?
+#Reading in data
+summary_data <- read.csv("Data/Mob_year_sum.csv")
 
-This is a 1-hour tutorial that can be used to teach or as self-paced learning. 
+mobulid_json <- jsonlite::toJSON(
+  summary_data,
+  dataframe = "rows",
+  auto_unbox = TRUE
+)
+```
 
-We introduce Quarto by exploring this tutorial website, and practicing the basic Quarto workflow using different tools (GitHub browser, RStudio, and Jupyter) for editing your website.
+<div id="mobulid-scroll-chart"> <svg id="mobulid-svg" viewBox="0 0 800 450"></svg> </div>
 
-We'll start off from the browser so you don't need to install any additional software, however this approach is very limited and you will soon outgrow its capabilities. If you don't already have a workflow to edit files and sync to GitHub from your computer, I recommend RStudio. You don't need to know R to use RStudio, and it has powerful editor features that make for happy workflows.
+```{r}
+#| echo: false
+#| results: asis
+cat(
+  '<script>
+  const mobulidData = ',
+  mobulid_json,
+  ';
+  </script>'
+)
+```
 
-[Quarto.org](https://quarto.org) is the go-to place for full documentation and more tutorials! 
 
-## Example Quarto sites
+<script>
 
-A few Quarto websites from Openscapes - so far we have been using Quarto for documentation using Quarto and Markdown files and Jupyter Notebooks.
+console.log("D3 loaded:", typeof d3);
+console.log("Mobulid data:", mobulidData);
 
--   [Champions Lessons Series](https://openscapes.github.io/series)
--   [Openscapes Approach Guide](https://openscapes.github.io/approach-guide/)
--   [NASA Earthdata Cloud Cookbook](https://nasa-openscapes.github.io/earthdata-cloud-cookbook/)
--   [2021 NASA Cloud Hackathon](https://nasa-openscapes.github.io/2021-Cloud-Hackathon/)
--   [Faylab Lab Manual](https://thefaylab.github.io/lab-manual/)
--   [A Quarto tip a day](https://mine-cetinkaya-rundel.github.io/quarto-tip-a-day/), by Mine Çetinkaya-Rundel
+const svg = d3.select("#mobulid-svg");
 
-## About
+const width = 800;
+const height = 450;
 
-[Openscapes](https://openscapes.org) is about better science for future us. We help researchers reimagine data analysis, develop modern skills that are of immediate value to them, and cultivate collaborative and inclusive research teams as part of the broader global open movement.
+const margin = {
+  top: 40,
+  right: 40,
+  bottom: 60,
+  left: 70
+};
 
-We're developing this tutorial to help folks with different levels of technical skills use [Quarto](https://quarto.org) for documentation and tutorial building. This tutorial was originally created for several different audiences: [NASA-Openscapes](https://nasa-openscapes.github.io) researcher support engineers using Python, communications directors at organizations promoting open science who do not identify as coders, and fisheries scientists curious about transitioning from RMarkdown. We're hoping it's useful to folks with backgrounds as wide as these; if you find it useful or have suggestions for improvement, please let us know by clicking "Edit this page" or "Report an issue" at the upper right side of any page.
+const xScale = d3.scaleLinear()
+  .domain([2005, 2025])
+  .range([margin.left, width - margin.right]);
+
+const yScale = d3.scaleLinear()
+  .domain([0, d3.max(mobulidData, d => d.total_rays)])
+  .range([height - margin.bottom, margin.top]);
+
+// Add x-axis
+svg.append("g")
+  .attr("transform", `translate(0,${height - margin.bottom})`)
+  .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
+
+// Add y-axis
+svg.append("g")
+  .attr("transform", `translate(${margin.left},0)`)
+  .call(d3.axisLeft(yScale));
+
+// X-axis label
+svg.append("text")
+  .attr("x", width / 2)
+  .attr("y", height - 10)
+  .attr("text-anchor", "middle")
+  .text("Year");
+
+// Y-axis label
+svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -(height / 2))
+  .attr("y", 20)
+  .attr("text-anchor", "middle")
+  .text("Total mobulids captured");
+  
+const line = d3.line()
+  .x(d => xScale(d.Year))
+  .y(d => yScale(d.total_rays));
+
+const path = svg.append("path")
+  .datum(mobulidData)
+  .attr("d", line)
+  .attr("fill", "none")
+  .attr("stroke", "black")
+  .attr("stroke-width", 3);
+
+const length = path.node().getTotalLength();
+
+path
+  .attr("stroke-dasharray", length)
+  .attr("stroke-dashoffset", length);
+
+function updateChart() {
+
+  const rect = document
+    .getElementById("mobulid-svg")
+    .getBoundingClientRect();
+
+  const windowHeight = window.innerHeight;
+
+  const start = windowHeight * 0.8;
+  const end = windowHeight * 0.2;
+
+  let progress =
+    (start - rect.top) / (start - end);
+
+  progress = Math.max(0, Math.min(1, progress));
+
+  path.attr(
+    "stroke-dashoffset",
+    length * (1 - progress)
+  );
+}
+
+window.addEventListener("scroll", updateChart);
+
+updateChart();
+
+</script>
+
