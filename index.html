@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Who catches Mantas?</title>
+<title>index</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -93,15 +93,15 @@ ul.task-list li input[type="checkbox"] {
             <ul class="navbar-nav navbar-nav-scroll me-auto">
   <li class="nav-item">
     <a class="nav-link active" href="./index.html" aria-current="page"> 
-<span class="menu-text">Who Catches Mantas?</span></a>
+<span class="menu-text">The Story</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./Research.qmd"> 
-<span class="menu-text">Research</span></a>
+    <a class="nav-link" href="./content/Research.html"> 
+<span class="menu-text">The Research</span></a>
   </li>  
   <li class="nav-item">
-    <a class="nav-link" href="./About.qmd"> 
-<span class="menu-text">About</span></a>
+    <a class="nav-link" href="./content/About.html"> 
+<span class="menu-text">About Me</span></a>
   </li>  
 </ul>
           </div> <!-- /navcollapse -->
@@ -118,63 +118,25 @@ ul.task-list li input[type="checkbox"] {
 <!-- margin-sidebar -->
     
 <!-- main -->
-<main class="content column-page" id="quarto-document-content">
-
-<header id="title-block-header" class="quarto-title-block default">
-<div class="quarto-title">
-<h1 class="title">Who catches Mantas?</h1>
-<p class="subtitle lead">Variation in manta ray bycatch within the Eastern Pacific Ocean (EPO) tuna purse seine fishery</p>
-</div>
+<main class="content column-page" id="quarto-document-content"><header id="title-block-header" class="quarto-title-block"></header>
 
 
-
-<div class="quarto-title-meta column-page">
-
-    
-  
-    
-  </div>
-  
-
-
-</header>
 
 
 <div class="hero">
 <div class="hero-image">
 
 </div>
-<section id="who-catches-mantas" class="level1 hero-content">
-<h1>Who Catches Mantas?</h1>
+<section id="who-drives-bycatch" class="level1 hero-content">
+<h1>Who Drives Bycatch?</h1>
 <section id="understanding-individual-variation-in-manta-and-devil-ray-bycatch-in-the-eastern-pacific-tuna-fishery" class="level2">
 <h2 class="anchored" data-anchor-id="understanding-individual-variation-in-manta-and-devil-ray-bycatch-in-the-eastern-pacific-tuna-fishery">Understanding individual variation in manta and devil ray bycatch in the eastern Pacific tuna fishery</h2>
 <p>Photo credit: TUNACONS</p>
 </section>
 </section>
 </div>
-<p>a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
-a/<br>
+<p><br>
 </p>
-<p>Fishing fleets are often treated as homogeneous. However, variation in operational configurations and fisher behavior can contribute to heterogeneity in efficiency and sustainability outcomes. Incidental catch, or “bycatch”, is a key sustainability concern for fisheries management and represents a global threat to vulnerable marine species. Understanding drivers of bycatch variation is crucial for informing effective bycatch reduction practices, but can be difficult to study for rare-event bycatch species when observer data are too limited to capture sufficient variation.</p>
-<p>In this study, we use the Eastern Pacific Ocean (EPO) tuna purse seine fishery as a case study to model fine-scale anthropogenic drivers of bycatch variation in a rare-event bycatch species, leveraging the fishery’s 100% observer coverage spanning 2005 - 2025. We use generalized additive mixed models to quantify the relative contributions of gear-, vessel-, and skipper-level variation to bycatch variability in manta and devil rays (mobulids), a pelagic genus considered vulnerable to bycatch in tuna purse seine fisheries.</p>
-<p>After standardizing spatiotemporal predictors of mobulid capture, we find that variability between skippers explains a higher proportion of mobulid bycatch probability than variability between vessel and gear factors, indicating that individual experiences, perceptions, and knowledge may play an important role in bycatch outcomes. Further, we find that low-bycatch skippers typically maintain higher target catch efficiency than high-bycatch skippers, suggesting that mobulid bycatch could be reduced without compromising target catch.</p>
-<p>Our findings highlight the importance of considering both operational drivers of bycatch and individual variation in fisher behavior and fishing strategies as potential opportunities for bycatch mitigation.</p>
 <section id="catch-trends" class="level2">
 <h2 class="anchored" data-anchor-id="catch-trends">Catch trends</h2>
 <p>Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations.</p>
@@ -209,31 +171,27 @@ const yScale = d3.scaleLinear()
   .domain([0, d3.max(mobulidData, d => d.total_rays)])
   .range([height - margin.bottom, margin.top]);
 
-// Add x-axis
 svg.append("g")
   .attr("transform", `translate(0,${height - margin.bottom})`)
   .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
 
-// Add y-axis
 svg.append("g")
   .attr("transform", `translate(${margin.left},0)`)
   .call(d3.axisLeft(yScale));
 
-// X-axis label
 svg.append("text")
   .attr("x", width / 2)
   .attr("y", height - 10)
   .attr("text-anchor", "middle")
   .text("Year");
 
-// Y-axis label
 svg.append("text")
   .attr("transform", "rotate(-90)")
   .attr("x", -(height / 2))
   .attr("y", 20)
   .attr("text-anchor", "middle")
   .text("Total mobulids captured");
-  
+
 const line = d3.line()
   .x(d => xScale(d.Year))
   .y(d => yScale(d.total_rays));
@@ -242,7 +200,7 @@ const path = svg.append("path")
   .datum(mobulidData)
   .attr("d", line)
   .attr("fill", "none")
-  .attr("stroke", "black")
+  .attr("stroke", "#2F6F7E")
   .attr("stroke-width", 3);
 
 const length = path.node().getTotalLength();
