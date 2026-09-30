@@ -1,0 +1,19 @@
+---
+format: html
+page-layout: full
+---
+
+<div class="paper-header">
+
+# Identifying Anthropogenic Mechanisms Associated with Mobulid Bycatch in the Eastern Pacific Ocean
+
+**Bella Garfield¹, Melissa Cronin¹**
+
+¹ School for Marine Science & Technology, University of Massachusetts Dartmouth
+
+
+</div>
+
+# Abstract
+
+*Fishing fleets are often treated as homogeneous. However, variation in operational configurations and fisher behavior can contribute to heterogeneity in efficiency and sustainability outcomes. Incidental catch, or “bycatch”, is a key sustainability concern for fisheries management and represents a global threat to vulnerable marine species. Understanding drivers of bycatch variation is crucial for informing effective bycatch reduction practices, but can be difficult to study for rare-event bycatch species when observer data are too limited to capture sufficient variation. In this study, we use the Eastern Pacific Ocean (EPO) tuna purse seine fishery as a case study to model fine-scale anthropogenic drivers of bycatch variation in a rare-event bycatch species, leveraging the fishery’s 100% observer coverage spanning 2005 - 2025. We use generalized additive mixed models to quantify the relative contributions of gear-, vessel-, and skipper-level variation to bycatch variability in manta and devil rays (mobulids), a pelagic genus considered vulnerable to bycatch in tuna purse seine fisheries. After standardizing spatiotemporal predictors of mobulid capture, we find that variability between skippers explains a higher proportion of mobulid bycatch probability than variability between vessel and gear factors, indicating that individual experiences, perceptions, and knowledge may play an important role in bycatch outcomes. Further, we find that low-bycatch skippers typically maintain higher target catch efficiency than high-bycatch skippers, suggesting that mobulid bycatch could be reduced without compromising target catch. Our findings highlight the importance of considering both operational drivers of bycatch and individual variation in fisher behavior and fishing strategies as potential opportunities for bycatch mitigation.*

@@ -11,13 +11,13 @@ website:
     search: true
     left:
       - href: index.qmd
-        text: Who Catches Mantas?
+        text: The Story
 
-      - text: Research
-        href: Research.qmd
+      - text: The Research
+        href: content/Research.qmd
 
-      - text: About
-        href: About.qmd
+      - text: About Me
+        href: content/About.qmd
     tools: 
       - icon: globe
         href: https://openscapes.org
