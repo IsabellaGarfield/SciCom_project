@@ -7,7 +7,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
 
-<title>Making shareable documents with Quarto – Making sharable documents with Quarto</title>
+<title>Who catches Mantas?</title>
 <style>
 /* Default styles provided by pandoc.
 ** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
@@ -30,12 +30,12 @@ ul.task-list li input[type="checkbox"] {
 
 
 <script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
 <script src="site_libs/clipboard/clipboard.min.js"></script>
 <script src="site_libs/quarto-search/autocomplete.umd.js"></script>
 <script src="site_libs/quarto-search/fuse.min.js"></script>
 <script src="site_libs/quarto-search/quarto-search.js"></script>
 <meta name="quarto:offset" content="./">
-<link href="./explore.html" rel="next">
 <script src="site_libs/quarto-html/quarto.js" type="module"></script>
 <script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
 <script src="site_libs/quarto-html/popper.min.js"></script>
@@ -45,13 +45,13 @@ ul.task-list li input[type="checkbox"] {
 <link href="site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="site_libs/bootstrap/bootstrap-2f92931d232d9d3ec7e03cd702e5919a.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="site_libs/bootstrap/bootstrap-496ea2bcdfeada1e9058297adde6f6bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
-  "location": "sidebar",
+  "location": "navbar",
   "copy-button": false,
   "collapse-after": 3,
-  "panel-placement": "start",
-  "type": "textbox",
+  "panel-placement": "end",
+  "type": "overlay",
   "limit": 50,
   "keyboard-shortcut": [
     "f",
@@ -73,133 +73,62 @@ ul.task-list li input[type="checkbox"] {
     "search-label": "Search"
   }
 }</script>
+<script src="https://d3js.org/d3.v7.min.js"></script>
 
 
+<link rel="stylesheet" href="assets/custom.css">
 </head>
 
-<body class="nav-sidebar docked quarto-light">
+<body class="nav-fixed quarto-light">
 
 <div id="quarto-search-results"></div>
   <header id="quarto-header" class="headroom fixed-top">
-  <nav class="quarto-secondary-nav">
-    <div class="container-fluid d-flex">
-      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
-        <i class="bi bi-layout-text-sidebar-reverse"></i>
-      </button>
-        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./index.html">Welcome</a></li></ol></nav>
-        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
-        </a>
-      <button type="button" class="btn quarto-search-button" aria-label="Search" onclick="window.quartoOpenSearch();">
-        <i class="bi bi-search"></i>
-      </button>
-    </div>
-  </nav>
-</header>
-<!-- content -->
-<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article">
-<!-- sidebar -->
-  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
-    <div class="pt-lg-2 mt-2 text-center sidebar-header">
-      <a href="./index.html" class="sidebar-logo-link">
-      <img src="./images/openscapes_hex.png" alt="" class="sidebar-logo light-content py-0 d-lg-inline d-none">
-      <img src="./images/openscapes_hex.png" alt="" class="sidebar-logo dark-content py-0 d-lg-inline d-none">
-      </a>
-      <div class="sidebar-tools-main tools-wide">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item">
+    <a class="nav-link active" href="./index.html" aria-current="page"> 
+<span class="menu-text">Who Catches Mantas?</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./Research.qmd"> 
+<span class="menu-text">Research</span></a>
+  </li>  
+  <li class="nav-item">
+    <a class="nav-link" href="./About.qmd"> 
+<span class="menu-text">About</span></a>
+  </li>  
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
     <a href="https://openscapes.org" title="Openscapes.org" class="quarto-navigation-tool px-1" aria-label="Openscapes.org"><i class="bi bi-globe"></i></a>
     <a href="https://github.com/openscapes/quarto-website-tutorial" title="Quarto website tutorial" class="quarto-navigation-tool px-1" aria-label="Quarto website tutorial"><i class="bi bi-github"></i></a>
-    <a href="https://twitter.com/openscapes" title="Openscapes Twitter" class="quarto-navigation-tool px-1" aria-label="Openscapes Twitter"><i class="bi bi-twitter"></i></a>
 </div>
-      </div>
-        <div class="mt-2 flex-shrink-0 align-items-center">
-        <div class="sidebar-search">
-        <div id="quarto-search" class="" title="Search"></div>
-        </div>
-        </div>
-    <div class="sidebar-menu-container"> 
-    <ul class="list-unstyled mt-1">
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./index.html" class="sidebar-item-text sidebar-link active">
- <span class="menu-text">Welcome</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./explore.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Explore and setup</span></a>
-  </div>
-</li>
-        <li class="sidebar-item sidebar-item-section">
-      <div class="sidebar-item-container"> 
-            <a href="./quarto-workflows/index.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Quarto workflows</span></a>
-          <a class="sidebar-item-toggle text-start collapsed" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="false" aria-label="Toggle section">
-            <i class="bi bi-chevron-right ms-2"></i>
-          </a> 
-      </div>
-      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 ">  
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./quarto-workflows/browser.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">From the Browser</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./quarto-workflows/rstudio.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">From RStudio</span></a>
-  </div>
-</li>
-          <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./quarto-workflows/jupyter.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">From Jupyter</span></a>
-  </div>
-</li>
-      </ul>
-  </li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./learning-more.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Learning more</span></a>
-  </div>
-</li>
-        <li class="sidebar-item">
-  <div class="sidebar-item-container"> 
-  <a href="./transition-from-rmarkdown.html" class="sidebar-item-text sidebar-link">
- <span class="menu-text">Transition from Rmd</span></a>
-  </div>
-</li>
-    </ul>
-    </div>
-</nav>
-<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+      </div> <!-- /container-fluid -->
+    </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-full page-navbar">
+<!-- sidebar -->
 <!-- margin-sidebar -->
-    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
-        <nav id="TOC" role="doc-toc" class="toc-active">
-    <h2 id="toc-title">On this page</h2>
-   
-  <ul>
-  <li><a href="#commit-check" id="toc-commit-check" class="nav-link active" data-scroll-target="#commit-check">COMMIT CHECK</a></li>
-  <li><a href="#what-is-quarto" id="toc-what-is-quarto" class="nav-link" data-scroll-target="#what-is-quarto">What is Quarto?</a></li>
-  <li><a href="#what-is-this-tutorial" id="toc-what-is-this-tutorial" class="nav-link" data-scroll-target="#what-is-this-tutorial">What is this tutorial?</a></li>
-  <li><a href="#example-quarto-sites" id="toc-example-quarto-sites" class="nav-link" data-scroll-target="#example-quarto-sites">Example Quarto sites</a></li>
-  <li><a href="#about" id="toc-about" class="nav-link" data-scroll-target="#about">About</a></li>
-  </ul>
-<div class="toc-actions"><ul><li><a href="https://github.com/openscapes/quarto-website-tutorial/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/openscapes/quarto-website-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></nav>
-    </div>
+    
 <!-- main -->
-<main class="content" id="quarto-document-content">
+<main class="content column-page" id="quarto-document-content">
 
 <header id="title-block-header" class="quarto-title-block default">
 <div class="quarto-title">
-<h1 class="title">Making shareable documents with Quarto</h1>
-<p class="subtitle lead">Create open-source tutorials, onboarding docs, and much more</p>
+<h1 class="title">Who catches Mantas?</h1>
+<p class="subtitle lead">Variation in manta ray bycatch within the Eastern Pacific Ocean (EPO) tuna purse seine fishery</p>
 </div>
 
 
 
-<div class="quarto-title-meta">
+<div class="quarto-title-meta column-page">
 
     
   
@@ -211,40 +140,144 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
-<section id="commit-check" class="level2">
-<h2 class="anchored" data-anchor-id="commit-check">COMMIT CHECK</h2>
-<p>It’s possible to create beautiful documentation to share online with <a href="https://quarto.org">Quarto</a> that auto-updates with <a href="http://github.com">GitHub</a>. This is very new and incredibly cool. This tutorial is an example of a quarto website — it is a really powerful way to create and share your work. You can communicate about science using the same reproducible workflow you and/or your colleagues use for analyses, whether or not you write code.</p>
-<p>Creating websites with Quarto can be done without knowing R, Python or HTML, CSS, etc, and that’s where we’ll start. However, Quarto integrates with these tools so you can make your websites as complex and beautiful as you like as you see examples and reuse and remix from others in the open community. This tutorial borrows heavily from a lot of great tutorials and resources you should check out too – there are links throughout.</p>
+<div class="hero">
+<div class="hero-image">
+
+</div>
+<section id="who-catches-mantas" class="level1 hero-content">
+<h1>Who Catches Mantas?</h1>
+<section id="understanding-individual-variation-in-manta-and-devil-ray-bycatch-in-the-eastern-pacific-tuna-fishery" class="level2">
+<h2 class="anchored" data-anchor-id="understanding-individual-variation-in-manta-and-devil-ray-bycatch-in-the-eastern-pacific-tuna-fishery">Understanding individual variation in manta and devil ray bycatch in the eastern Pacific tuna fishery</h2>
+<p>Photo credit: TUNACONS</p>
 </section>
-<section id="what-is-quarto" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-quarto">What is Quarto?</h2>
-<p>Quarto helps you have your ideas and your code in one place, and present it in a beautiful way.</p>
-<p><strong>Quarto unifies and extends the RMarkdown ecosystem</strong> - it unifies by combining the functionality of R Markdown, bookdown, distill, xaringian, etc into a single consistent system. And it extends in several ways: all features are possible beyond R too, including Python and Javascript. It also has more “guardrails”: accessibility and inclusion are centered in the design. Quarto is for people who love RMarkdown, and it’s for people who have never used RMarkdown.</p>
-<p>The ability for Quarto to streamline collaboration has been so cool and important for our <a href="https://nasa-openscapes.github.io/">NASA Openscapes</a> project. Quarto has been a common place for us to collaborate - across R and Python languages and coding expertise.</p>
 </section>
-<section id="what-is-this-tutorial" class="level2">
-<h2 class="anchored" data-anchor-id="what-is-this-tutorial">What is this tutorial?</h2>
-<p>This is a 1-hour tutorial that can be used to teach or as self-paced learning.</p>
-<p>We introduce Quarto by exploring this tutorial website, and practicing the basic Quarto workflow using different tools (GitHub browser, RStudio, and Jupyter) for editing your website.</p>
-<p>We’ll start off from the browser so you don’t need to install any additional software, however this approach is very limited and you will soon outgrow its capabilities. If you don’t already have a workflow to edit files and sync to GitHub from your computer, I recommend RStudio. You don’t need to know R to use RStudio, and it has powerful editor features that make for happy workflows.</p>
-<p><a href="https://quarto.org">Quarto.org</a> is the go-to place for full documentation and more tutorials!</p>
-</section>
-<section id="example-quarto-sites" class="level2">
-<h2 class="anchored" data-anchor-id="example-quarto-sites">Example Quarto sites</h2>
-<p>A few Quarto websites from Openscapes - so far we have been using Quarto for documentation using Quarto and Markdown files and Jupyter Notebooks.</p>
-<ul>
-<li><a href="https://openscapes.github.io/series">Champions Lessons Series</a></li>
-<li><a href="https://openscapes.github.io/approach-guide/">Openscapes Approach Guide</a></li>
-<li><a href="https://nasa-openscapes.github.io/earthdata-cloud-cookbook/">NASA Earthdata Cloud Cookbook</a></li>
-<li><a href="https://nasa-openscapes.github.io/2021-Cloud-Hackathon/">2021 NASA Cloud Hackathon</a></li>
-<li><a href="https://thefaylab.github.io/lab-manual/">Faylab Lab Manual</a></li>
-<li><a href="https://mine-cetinkaya-rundel.github.io/quarto-tip-a-day/">A Quarto tip a day</a>, by Mine Çetinkaya-Rundel</li>
-</ul>
-</section>
-<section id="about" class="level2">
-<h2 class="anchored" data-anchor-id="about">About</h2>
-<p><a href="https://openscapes.org">Openscapes</a> is about better science for future us. We help researchers reimagine data analysis, develop modern skills that are of immediate value to them, and cultivate collaborative and inclusive research teams as part of the broader global open movement.</p>
-<p>We’re developing this tutorial to help folks with different levels of technical skills use <a href="https://quarto.org">Quarto</a> for documentation and tutorial building. This tutorial was originally created for several different audiences: <a href="https://nasa-openscapes.github.io">NASA-Openscapes</a> researcher support engineers using Python, communications directors at organizations promoting open science who do not identify as coders, and fisheries scientists curious about transitioning from RMarkdown. We’re hoping it’s useful to folks with backgrounds as wide as these; if you find it useful or have suggestions for improvement, please let us know by clicking “Edit this page” or “Report an issue” at the upper right side of any page.</p>
+</div>
+<p>a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+a/<br>
+</p>
+<p>Fishing fleets are often treated as homogeneous. However, variation in operational configurations and fisher behavior can contribute to heterogeneity in efficiency and sustainability outcomes. Incidental catch, or “bycatch”, is a key sustainability concern for fisheries management and represents a global threat to vulnerable marine species. Understanding drivers of bycatch variation is crucial for informing effective bycatch reduction practices, but can be difficult to study for rare-event bycatch species when observer data are too limited to capture sufficient variation.</p>
+<p>In this study, we use the Eastern Pacific Ocean (EPO) tuna purse seine fishery as a case study to model fine-scale anthropogenic drivers of bycatch variation in a rare-event bycatch species, leveraging the fishery’s 100% observer coverage spanning 2005 - 2025. We use generalized additive mixed models to quantify the relative contributions of gear-, vessel-, and skipper-level variation to bycatch variability in manta and devil rays (mobulids), a pelagic genus considered vulnerable to bycatch in tuna purse seine fisheries.</p>
+<p>After standardizing spatiotemporal predictors of mobulid capture, we find that variability between skippers explains a higher proportion of mobulid bycatch probability than variability between vessel and gear factors, indicating that individual experiences, perceptions, and knowledge may play an important role in bycatch outcomes. Further, we find that low-bycatch skippers typically maintain higher target catch efficiency than high-bycatch skippers, suggesting that mobulid bycatch could be reduced without compromising target catch.</p>
+<p>Our findings highlight the importance of considering both operational drivers of bycatch and individual variation in fisher behavior and fishing strategies as potential opportunities for bycatch mitigation.</p>
+<section id="catch-trends" class="level2">
+<h2 class="anchored" data-anchor-id="catch-trends">Catch trends</h2>
+<p>Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations.</p>
+<div id="mobulid-scroll-chart">
+<svg id="mobulid-svg" viewbox="0 0 800 450"></svg>
+</div>
+<script>
+  const mobulidData =  [{"X":1,"Year":2006,"total_rays":2386},{"X":2,"Year":2007,"total_rays":1135},{"X":3,"Year":2008,"total_rays":1318},{"X":4,"Year":2009,"total_rays":1131},{"X":5,"Year":2010,"total_rays":3333},{"X":6,"Year":2011,"total_rays":1242},{"X":7,"Year":2012,"total_rays":3232},{"X":8,"Year":2013,"total_rays":1056},{"X":9,"Year":2014,"total_rays":622},{"X":10,"Year":2015,"total_rays":1068},{"X":11,"Year":2016,"total_rays":1228},{"X":12,"Year":2017,"total_rays":809},{"X":13,"Year":2018,"total_rays":593},{"X":14,"Year":2019,"total_rays":1256},{"X":15,"Year":2020,"total_rays":529},{"X":16,"Year":2021,"total_rays":484},{"X":17,"Year":2022,"total_rays":469},{"X":18,"Year":2023,"total_rays":687},{"X":19,"Year":2024,"total_rays":1427}] ;
+  </script>
+<script>
+
+console.log("D3 loaded:", typeof d3);
+console.log("Mobulid data:", mobulidData);
+
+const svg = d3.select("#mobulid-svg");
+
+const width = 800;
+const height = 450;
+
+const margin = {
+  top: 40,
+  right: 40,
+  bottom: 60,
+  left: 70
+};
+
+const xScale = d3.scaleLinear()
+  .domain([2005, 2025])
+  .range([margin.left, width - margin.right]);
+
+const yScale = d3.scaleLinear()
+  .domain([0, d3.max(mobulidData, d => d.total_rays)])
+  .range([height - margin.bottom, margin.top]);
+
+// Add x-axis
+svg.append("g")
+  .attr("transform", `translate(0,${height - margin.bottom})`)
+  .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
+
+// Add y-axis
+svg.append("g")
+  .attr("transform", `translate(${margin.left},0)`)
+  .call(d3.axisLeft(yScale));
+
+// X-axis label
+svg.append("text")
+  .attr("x", width / 2)
+  .attr("y", height - 10)
+  .attr("text-anchor", "middle")
+  .text("Year");
+
+// Y-axis label
+svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -(height / 2))
+  .attr("y", 20)
+  .attr("text-anchor", "middle")
+  .text("Total mobulids captured");
+  
+const line = d3.line()
+  .x(d => xScale(d.Year))
+  .y(d => yScale(d.total_rays));
+
+const path = svg.append("path")
+  .datum(mobulidData)
+  .attr("d", line)
+  .attr("fill", "none")
+  .attr("stroke", "black")
+  .attr("stroke-width", 3);
+
+const length = path.node().getTotalLength();
+
+path
+  .attr("stroke-dasharray", length)
+  .attr("stroke-dashoffset", length);
+
+function updateChart() {
+
+  const rect = document
+    .getElementById("mobulid-svg")
+    .getBoundingClientRect();
+
+  const windowHeight = window.innerHeight;
+
+  const start = windowHeight * 0.8;
+  const end = windowHeight * 0.2;
+
+  let progress =
+    (start - rect.top) / (start - end);
+
+  progress = Math.max(0, Math.min(1, progress));
+
+  path.attr(
+    "stroke-dashoffset",
+    length * (1 - progress)
+  );
+}
+
+window.addEventListener("scroll", updateChart);
+
+updateChart();
+
+</script>
 
 
 </section>
@@ -650,15 +683,6 @@ ul.task-list li input[type="checkbox"] {
     }
   });
   </script>
-<nav class="page-navigation">
-  <div class="nav-page nav-page-previous">
-  </div>
-  <div class="nav-page nav-page-next">
-      <a href="./explore.html" class="pagination-link" aria-label="Explore and setup">
-        <span class="nav-page-text">Explore and setup</span> <i class="bi bi-arrow-right-short"></i>
-      </a>
-  </div>
-</nav>
 </div> <!-- /content -->
 <footer class="footer">
   <div class="nav-footer">
@@ -667,7 +691,7 @@ ul.task-list li input[type="checkbox"] {
 </div>   
     <div class="nav-footer-center">
       &nbsp;
-    <div class="toc-actions d-sm-block d-md-none"><ul><li><a href="https://github.com/openscapes/quarto-website-tutorial/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/openscapes/quarto-website-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
+    <div class="toc-actions"><ul><li><a href="https://github.com/openscapes/quarto-website-tutorial/edit/main/index.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/openscapes/quarto-website-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
     <div class="nav-footer-right">
 <p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
 </div>
