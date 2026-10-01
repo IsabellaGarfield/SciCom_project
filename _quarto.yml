@@ -13,10 +13,7 @@ website:
       - href: index.qmd
         text: The Story
 
-      - text: The Research
-        href: content/Research.qmd
-
-      - text: About Me
+      - text: How-To
         href: content/About.qmd
     tools: 
       - icon: globe
