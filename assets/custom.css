@@ -1,3 +1,4 @@
+#Page-themes
 body {background-color: #F7F8F5;}
 
 .navbar {background-color: #123B4A;}
@@ -6,30 +7,7 @@ body {background-color: #F7F8F5;}
 
 a {color: #2D7180;}
 
-#quarto-content {
-  width: 100%;
-  max-width: none;
-}
-main.content {
-  max-width: none;
-  width: 100%;
-}
-
-.title {
-  font-size: clamp(3rem, 6vw, 6rem);
-  font-weight: 800;
-  line-height: 0.95;
-  letter-spacing: -0.03em;
-}
-body {
-  font-size: 1.1rem;
-  line-height: 1.7;
-}
-
 #Hero
-/* =========================
-   HOMEPAGE HERO
-   ========================= */
 
 .hero {
   position: relative;
