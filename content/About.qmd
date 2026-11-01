@@ -2,4 +2,172 @@
 title: "How to use this template"
 format: html
 ---
+This GitHub repository is designed to showcase how R and Javascript can work together to produce interactive scientific storytelling. This repository uses Quarto pages as it's visual platform, allowing all code used in the project's development to be copied and modified for those interested in applying this tool towards their own scientific use. This page serves as a reference for understanding key files and code sections, making future modifications and troubleshooting easier. 
+
+Having a basic understanding of [Github pages](https://quarto.org/docs/publishing/github-pages.html) will help immensely for navigating this repository. This repository was forked from [Openscapes Quarto tutorial](https://github.com/openscapes/quarto-website-tutorial) repository, which offers an incredibly helpful beginner-friendly template and learning resources for new users.
+
+
+To learn more about how Openscapes facilitates and supports open-science practices across groups such as NASA and NOAA, check out their [page](https://openscapes.org/). This project serves as a creative spinoff from what I learned in their NOAA Champions training.  
+
+
+
+## .qmd files
+Each quarto file - shown as .qmd files - serves as an individual web page. For example, this website has two .qmd files - the home page "The Story" and the supplementary page "How-To". This is a markdown file, so adding text to a quarto document is much like adding text to a word document! Although fairly straightforward, it can get quirky with [syntax](https://quarto.org/docs/authoring/markdown-basics.html) - this reference also include in-text code chunks. I want to include some additional notes:
+
+- index.qmd - this is the home page quarto document. It is standard to keep this file in the root project directory instead of within a folder. The supplementary web pages are kept in the folder "content". Since the index.qmd file for this repository hosts the code instructing the interactive figures such as the self-animating line plot created with Javascript. Here I will outline what the code chunks are accomplishing in Index.qmd.
+
+<details>
+<summary>Adding a Hero</summary>
+A Hero is a large visual banner that can serve as the 'header' for a page. On Index.qmd, this is the large picture of the manta with the title "Who Drives Bycatch". The Hero is placed over where the typical page title would be located. 
+
+In index.qmd, the code deliniating the hero uses HTML on line 9:
+
+```markdown
+::: {.hero}
+<!-- Opens a Quarto fenced div and assigns it the class "hero".
+     This creates the outer container for all Hero elements and
+     connects the container to its styling in custom.css. -->
+
+<div class="hero-image"></div>
+<!-- Creates an empty HTML container for the Hero background image.
+     The image source and formatting (size, positioning, etc.) are
+     specified separately in custom.css. -->
+
+<div class="hero-content">
+<!-- Opens an HTML container for the text displayed over the Hero image.
+     The "hero-content" class controls the text's positioning and
+     appearance through custom.css. -->
+
+# Who Drives Bycatch?
+<!-- Main Hero title (H1). -->
+
+## Understanding individual variation in manta and devil ray bycatch
+## in the eastern Pacific tuna fishery
+<!-- Hero subtitle (H2), providing additional context about the research. -->
+
+Photo credit: TUNACONS
+<!-- Identifies the source of the Hero photograph. -->
+
+</div>
+<!-- Closes the Hero text container. -->
+
+:::
+<!-- Closes the outer Quarto Hero container. -->
+```
+This code establishes the banner's structure, including its image container and text content. The HTML is relatively minimal, while the image source, positioning, layout, and visual formatting are controlled separately through the CSS stylesheet (custom.css). In short, the HTML establishes the structure and content (in the quarto doc) while the CSS controls the appearance and presentation (More info on the CSS document below)
+</details>
+
+<details>
+<summary>Adding a scroll-animated line graph</summary>
+
+Coding the scroll-animated line graph requires three separate chunks: 1) data preparation (R), 2) chart container (HTML), 3) data transfer to JavaScript, and 4) developing the figure itself. I am going to overview these four steps in detail below. 
+
+**While the code might seem intimidating, there is not a lot you will need to explicitly change**. 
+
+1) Data preparation\
+*Reads the annual mobulid capture data into R and converts it into JSON so that JavaScript (D3.js) can access and visualize the data.*
+```markdown
+# Reads the annual mobulid capture summary dataset from the Data folder.
+# This dataset contains the values used to populate the interactive chart.
+summary_data <- read.csv("Data/Mob_year_sum.csv")
+
+# Converts the R dataframe into JSON (JavaScript Object Notation),
+# a format that allows data to be transferred from R into JavaScript.
+# dataframe = "rows" organizes each row as an individual data object.
+# auto_unbox = TRUE prevents single values from being unnecessarily
+# wrapped in arrays.
+mobulid_json <- jsonlite::toJSON(
+  summary_data,
+  dataframe = "rows",
+  auto_unbox = TRUE
+)
+```
+
+2) Developing an HTML chart container \
+*Establishes the space on the webpage where the chart will appear. The SVG element acts as the drawing surface for the D3.js visualization.*
+```html
+<div id="mobulid-scroll-chart">
+  <!-- Creates an HTML container for the scroll-triggered chart. -->
+
+  <svg id="mobulid-svg" viewBox="0 0 800 450"></svg>
+  <!-- Creates an SVG (Scalable Vector Graphics) element where D3.js
+       will draw the chart. The viewBox establishes the chart's
+       coordinate system and dimensions (800 x 450). -->
+
+</div>
+<!-- Closes the chart container. -->
+```
+3) Data transfer to Javascript
+```markdown
+# following 2 lines essentially says "run this code but don't show it"
+#| echo: false
+#| results: asis
+
+# Inserts the JSON-formatted mobulid dataset into the webpage
+# as a JavaScript variable called "mobulidData".
+# This makes the R dataset accessible to the D3.js chart code.
+
+cat(
+  '<script>
+  const mobulidData = ',
+  mobulid_json,
+  ';
+  </script>'
+)
+```
+
+This is a lot of information if you are not familiar with Javascript! Fear not. If you want to replicate this code chunk, all you need to worry about here is reading your own data in the read.csv() line, where you specify the file path to your own dataset. The remaining code can stay as is.
+
+Now, stage 4) Developing the figure\
+This chunk of code is annotated, so I will go over the summary concepts here but refer to the [index.qmd](https://github.com/IsabellaGarfield/SciCom_project/blob/main/index.qmd) lines 57 - 146 for reference on which code chunks to alter specifically. The following is a summary:
+
+- width, height:	Overall chart dimensions
+- margin:	Spacing around the chart
+- xScale.domain():	X-axis range
+- yScale:	Variable being plotted
+- .text():	Axis labels
+- .x() and .y():	Dataset column references
+- .attr("stroke"):	Line color
+- .attr("stroke-width"):	Line thickness
+- start and end:	When the scroll animation begins and finishes
+
+
+</details>
+
+## custom.css
+This [file](https://github.com/IsabellaGarfield/SciCom_project/blob/main/assets/custom.css) (located in folder assets/custom.css) is vital for aesthetics! As of now, this file manipulates the blue/white webpage color palettes (Page-themes) and detailed instructions for the Hero layout - which is the large photo / web page title banner displayed on the home page. 
+
+### Page-themes
+This short chunk of code specifies webpage color themes. Any themes specified here overwrites the _quarto.yml theme designation. 
+
+```
+#Page-themes
+body {background-color: #F7F8F5;}
+
+.navbar {background-color: #123B4A;}
+
+.navbar a {color: #F7F8F5;}
+
+a {color: #2D7180;}
+```
+- body - sets overall webpage background color
+- .navbar - sets background and contrast color palette
+- a - sets default color of hyperlinks throughout webpage
+
+### Hero
+The Hero CSS [chunk](https://github.com/IsabellaGarfield/SciCom_project/blob/06f4a46314d686cf21ef95df0b98cc6306b49b9c/assets/custom.css#L10) is organized into several sections that control the banner's appearance, including the hero container dimensions, background image (where you will need to update the image filepath if using a different image), title and subtitle font styling, and overall positioning. Although this section of code is relatively long, it is annotated throughout, so refer to the CSS file for more detailed guidance when making changes.
+
+The CSS establishes the Hero's visual layout and styling, while the HTML chunk in index.qmd calls these elements into the webpage and provides the actual title and subtitle.
+
+
+
+## _quarto.yml
+While the individual .qmd files (quarto pages) determine the content on each individual web page, the _quarto.yml serves as the 'spine' that binds the pages together (among other things...) so it is important to understand how to change this file to manipulate web page structure.I will link [this resource](https://openscapes.github.io/quarto-website-tutorial/quarto-workflows/) as another helpful tool to navigate this document, but wanted to include some additional key notes:
+
+- This is a YAML document ("Yet Another Markup Language" can be finicky with syntax, use [YAML Validator](https://yamlchecker.com/) to check your code if running into issues)
+- 'navbar:' this is where you add, remove, or rearrange the individual web pages for your website. 'href' identifies the filepath to the .qmd page (quarto page), and 'text' identifies how you want the name to appear on the website. 
+
+- 'tools': There is a globe icon and a github icon that appear on the page that you can assign links to. I use this to link the github's specific repository so viewers can easily navigate to the corresponding code, and the globe icon links to the home page of the website. 
+
+- 'format': you can change website themes (i.e. changing 'cosmic' to one of the many [quarto options](https://quarto.org/docs/output-formats/html-themes.html)! For a fun one, try changing cosmic to 'quartz' to get a rainbow background theme :))
 

@@ -61,9 +61,11 @@ console.log("Mobulid data:", mobulidData);
 
 const svg = d3.select("#mobulid-svg");
 
+//Adjust overall chart dimensions
 const width = 800;
 const height = 450;
 
+//Adjust spacing around the chart to accommodate axes and labels
 const margin = {
   top: 40,
   right: 40,
@@ -71,10 +73,13 @@ const margin = {
   left: 70
 };
 
+//Adjust x-axis range to match your dataset 
+//(currently displays years 2005–2025)
 const xScale = d3.scaleLinear()
   .domain([2005, 2025])
   .range([margin.left, width - margin.right]);
 
+//Update "total_rays" if using a different y-axis variable
 const yScale = d3.scaleLinear()
   .domain([0, d3.max(mobulidData, d => d.total_rays)])
   .range([height - margin.bottom, margin.top]);
@@ -87,12 +92,15 @@ svg.append("g")
   .attr("transform", `translate(${margin.left},0)`)
   .call(d3.axisLeft(yScale));
 
+//Customize axis labels
+//x axis
 svg.append("text")
   .attr("x", width / 2)
   .attr("y", height - 10)
   .attr("text-anchor", "middle")
   .text("Year");
-
+  
+//y axis
 svg.append("text")
   .attr("transform", "rotate(-90)")
   .attr("x", -(height / 2))
@@ -100,10 +108,12 @@ svg.append("text")
   .attr("text-anchor", "middle")
   .text("Total mobulids captured");
 
+//Update column references if using a different dataset (Year = x axis, total_rays = y axis)
 const line = d3.line()
   .x(d => xScale(d.Year))
   .y(d => yScale(d.total_rays));
 
+//Customize line color and thickness
 const path = svg.append("path")
   .datum(mobulidData)
   .attr("d", line)
@@ -125,6 +135,8 @@ function updateChart() {
 
   const windowHeight = window.innerHeight;
 
+ // Adjust when the animation begins and ends
+  // (0.8 = 80% and 0.2 = 20% of the window height)
   const start = windowHeight * 0.8;
   const end = windowHeight * 0.2;
 

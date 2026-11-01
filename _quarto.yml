@@ -3,8 +3,8 @@ project:
 
 website:
   page-navigation: true
-  site-url: "https://openscapes.github.io/quarto-website-tutorial"
-  repo-url: "https://github.com/openscapes/quarto-website-tutorial"
+  site-url: "https://isabellagarfield.github.io/SciCom_project/"
+  repo-url: "https://github.com/IsabellaGarfield/SciCom_project"
   repo-actions: [edit, issue]
 
   navbar:
@@ -17,16 +17,11 @@ website:
         href: content/About.qmd
     tools: 
       - icon: globe
-        href: https://openscapes.org
-        text: "Openscapes.org"
+        href: https://isabellagarfield.github.io/SciCom_project/
+        text: "Who Drives Bycatch?"
       - icon: github
-        href: https://github.com/openscapes/quarto-website-tutorial
-        text: "Quarto website tutorial"
-        
-
-  page-footer:
-    right: "This page is built with ❤️ and [Quarto](https://quarto.org/)."
-    left: "&copy; CC-By Openscapes, 2024"
+        href: https://github.com/IsabellaGarfield/SciCom_project
+        text: "Github repository"
 
 format:
   html:
