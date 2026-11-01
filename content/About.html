@@ -2,7 +2,7 @@
 <html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
 
 <meta charset="utf-8">
-<meta name="generator" content="quarto-1.10.18">
+<meta name="generator" content="quarto-1.10.20">
 
 <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
 
@@ -26,6 +26,41 @@ ul.task-list li input[type="checkbox"] {
   margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
   vertical-align: middle;
 }
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
 </style>
 
 
@@ -42,10 +77,10 @@ ul.task-list li input[type="checkbox"] {
 <script src="../site_libs/quarto-html/tippy.umd.min.js"></script>
 <script src="../site_libs/quarto-html/anchor.min.js"></script>
 <link href="../site_libs/quarto-html/tippy.css" rel="stylesheet">
-<link href="../site_libs/quarto-html/quarto-syntax-highlighting-64a204ab8560d761af7679ceaba22944.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<link href="../site_libs/quarto-html/quarto-syntax-highlighting-17888a1159294d3eb470f19f6f52f5a5.css" rel="stylesheet" id="quarto-text-highlighting-styles">
 <script src="../site_libs/bootstrap/bootstrap.min.js"></script>
 <link href="../site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
-<link href="../site_libs/bootstrap/bootstrap-496ea2bcdfeada1e9058297adde6f6bf.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<link href="../site_libs/bootstrap/bootstrap-4bb71d688201d0ed381a25d1b83af157.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
 <script id="quarto-search-options" type="application/json">{
   "location": "navbar",
   "copy-button": false,
@@ -101,8 +136,8 @@ ul.task-list li input[type="checkbox"] {
 </ul>
           </div> <!-- /navcollapse -->
             <div class="quarto-navbar-tools">
-    <a href="https://openscapes.org" title="Openscapes.org" class="quarto-navigation-tool px-1" aria-label="Openscapes.org"><i class="bi bi-globe"></i></a>
-    <a href="https://github.com/openscapes/quarto-website-tutorial" title="Quarto website tutorial" class="quarto-navigation-tool px-1" aria-label="Quarto website tutorial"><i class="bi bi-github"></i></a>
+    <a href="https://isabellagarfield.github.io/SciCom_project/" title="Who Drives Bycatch?" class="quarto-navigation-tool px-1" aria-label="Who Drives Bycatch?"><i class="bi bi-globe"></i></a>
+    <a href="https://github.com/IsabellaGarfield/SciCom_project" title="Github repository" class="quarto-navigation-tool px-1" aria-label="Github repository"><i class="bi bi-github"></i></a>
 </div>
       </div> <!-- /container-fluid -->
     </nav>
@@ -134,8 +169,163 @@ ul.task-list li input[type="checkbox"] {
 </header>
 
 
+<p>This GitHub repository is designed to showcase how R and Javascript can work together to produce interactive scientific storytelling. This repository uses Quarto pages as it’s visual platform, allowing all code used in the project’s development to be copied and modified for those interested in applying this tool towards their own scientific use. This page serves as a reference for understanding key files and code sections, making future modifications and troubleshooting easier.</p>
+<p>Having a basic understanding of <a href="https://quarto.org/docs/publishing/github-pages.html">Github pages</a> will help immensely for navigating this repository. This repository was forked from <a href="https://github.com/openscapes/quarto-website-tutorial">Openscapes Quarto tutorial</a> repository, which offers an incredibly helpful beginner-friendly template and learning resources for new users.</p>
+<p>To learn more about how Openscapes facilitates and supports open-science practices across groups such as NASA and NOAA, check out their <a href="https://openscapes.org/">page</a>. This project serves as a creative spinoff from what I learned in their NOAA Champions training.</p>
+<section id="qmd-files" class="level2">
+<h2 class="anchored" data-anchor-id="qmd-files">.qmd files</h2>
+<p>Each quarto file - shown as .qmd files - serves as an individual web page. For example, this website has two .qmd files - the home page “The Story” and the supplementary page “How-To”. This is a markdown file, so adding text to a quarto document is much like adding text to a word document! Although fairly straightforward, it can get quirky with <a href="https://quarto.org/docs/authoring/markdown-basics.html">syntax</a> - this reference also include in-text code chunks. I want to include some additional notes:</p>
+<ul>
+<li>index.qmd - this is the home page quarto document. It is standard to keep this file in the root project directory instead of within a folder. The supplementary web pages are kept in the folder “content”. Since the index.qmd file for this repository hosts the code instructing the interactive figures such as the self-animating line plot created with Javascript. Here I will outline what the code chunks are accomplishing in Index.qmd.</li>
+</ul>
+<details>
+<summary>
+Adding a Hero
+</summary>
+<p>A Hero is a large visual banner that can serve as the ‘header’ for a page. On Index.qmd, this is the large picture of the manta with the title “Who Drives Bycatch”. The Hero is placed over where the typical page title would be located.</p>
+<p>In index.qmd, the code deliniating the hero uses HTML on line 9:</p>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb1"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a>::: {.hero}</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Opens a Quarto fenced div and assigns it the class "hero".</span></span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="co">     This creates the outer container for all Hero elements and</span></span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="co">     connects the container to its styling in custom.css. --&gt;</span></span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"hero-image"</span><span class="dt">&gt;&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Creates an empty HTML container for the Hero background image.</span></span>
+<span id="cb1-8"><a href="#cb1-8" aria-hidden="true" tabindex="-1"></a><span class="co">     The image source and formatting (size, positioning, etc.) are</span></span>
+<span id="cb1-9"><a href="#cb1-9" aria-hidden="true" tabindex="-1"></a><span class="co">     specified separately in custom.css. --&gt;</span></span>
+<span id="cb1-10"><a href="#cb1-10" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-11"><a href="#cb1-11" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> class</span><span class="op">=</span><span class="st">"hero-content"</span><span class="dt">&gt;</span></span>
+<span id="cb1-12"><a href="#cb1-12" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Opens an HTML container for the text displayed over the Hero image.</span></span>
+<span id="cb1-13"><a href="#cb1-13" aria-hidden="true" tabindex="-1"></a><span class="co">     The "hero-content" class controls the text's positioning and</span></span>
+<span id="cb1-14"><a href="#cb1-14" aria-hidden="true" tabindex="-1"></a><span class="co">     appearance through custom.css. --&gt;</span></span>
+<span id="cb1-15"><a href="#cb1-15" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-16"><a href="#cb1-16" aria-hidden="true" tabindex="-1"></a><span class="fu"># Who Drives Bycatch?</span></span>
+<span id="cb1-17"><a href="#cb1-17" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Main Hero title (H1). --&gt;</span></span>
+<span id="cb1-18"><a href="#cb1-18" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-19"><a href="#cb1-19" aria-hidden="true" tabindex="-1"></a><span class="fu">## Understanding individual variation in manta and devil ray bycatch</span></span>
+<span id="cb1-20"><a href="#cb1-20" aria-hidden="true" tabindex="-1"></a><span class="fu">## in the eastern Pacific tuna fishery</span></span>
+<span id="cb1-21"><a href="#cb1-21" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Hero subtitle (H2), providing additional context about the research. --&gt;</span></span>
+<span id="cb1-22"><a href="#cb1-22" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-23"><a href="#cb1-23" aria-hidden="true" tabindex="-1"></a>Photo credit: TUNACONS</span>
+<span id="cb1-24"><a href="#cb1-24" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Identifies the source of the Hero photograph. --&gt;</span></span>
+<span id="cb1-25"><a href="#cb1-25" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-26"><a href="#cb1-26" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb1-27"><a href="#cb1-27" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Closes the Hero text container. --&gt;</span></span>
+<span id="cb1-28"><a href="#cb1-28" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-29"><a href="#cb1-29" aria-hidden="true" tabindex="-1"></a>:::</span>
+<span id="cb1-30"><a href="#cb1-30" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Closes the outer Quarto Hero container. --&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+This code establishes the banner’s structure, including its image container and text content. The HTML is relatively minimal, while the image source, positioning, layout, and visual formatting are controlled separately through the CSS stylesheet (custom.css). In short, the HTML establishes the structure and content (in the quarto doc) while the CSS controls the appearance and presentation (More info on the CSS document below)
+</details>
+<details>
+<summary>
+Adding a scroll-animated line graph
+</summary>
+<p>Coding the scroll-animated line graph requires three separate chunks: 1) data preparation (R), 2) chart container (HTML), 3) data transfer to JavaScript, and 4) developing the figure itself. I am going to overview these four steps in detail below.</p>
+<p><strong>While the code might seem intimidating, there is not a lot you will need to explicitly change</strong>.</p>
+<ol type="1">
+<li>Data preparation<br>
+<em>Reads the annual mobulid capture data into R and converts it into JSON so that JavaScript (D3.js) can access and visualize the data.</em></li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb2"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># Reads the annual mobulid capture summary dataset from the Data folder.</span></span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a><span class="fu"># This dataset contains the values used to populate the interactive chart.</span></span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>summary_data &lt;- read.csv("Data/Mob_year_sum.csv")</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># Converts the R dataframe into JSON (JavaScript Object Notation),</span></span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># a format that allows data to be transferred from R into JavaScript.</span></span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a><span class="fu"># dataframe = "rows" organizes each row as an individual data object.</span></span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="fu"># auto_unbox = TRUE prevents single values from being unnecessarily</span></span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a><span class="fu"># wrapped in arrays.</span></span>
+<span id="cb2-10"><a href="#cb2-10" aria-hidden="true" tabindex="-1"></a>mobulid_json &lt;- jsonlite::toJSON(</span>
+<span id="cb2-11"><a href="#cb2-11" aria-hidden="true" tabindex="-1"></a>  summary_data,</span>
+<span id="cb2-12"><a href="#cb2-12" aria-hidden="true" tabindex="-1"></a>  dataframe = "rows",</span>
+<span id="cb2-13"><a href="#cb2-13" aria-hidden="true" tabindex="-1"></a>  auto_unbox = TRUE</span>
+<span id="cb2-14"><a href="#cb2-14" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol start="2" type="1">
+<li>Developing an HTML chart container<br>
+<em>Establishes the space on the webpage where the chart will appear. The SVG element acts as the drawing surface for the D3.js visualization.</em></li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb3"><pre class="sourceCode html code-with-copy"><code class="sourceCode html"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;</span><span class="kw">div</span><span class="ot"> id</span><span class="op">=</span><span class="st">"mobulid-scroll-chart"</span><span class="dt">&gt;</span></span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>  <span class="co">&lt;!-- Creates an HTML container for the scroll-triggered chart. --&gt;</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;</span><span class="kw">svg</span><span class="ot"> id</span><span class="op">=</span><span class="st">"mobulid-svg"</span><span class="ot"> viewBox</span><span class="op">=</span><span class="st">"0 0 800 450"</span><span class="dt">&gt;&lt;/</span><span class="kw">svg</span><span class="dt">&gt;</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>  <span class="co">&lt;!-- Creates an SVG (Scalable Vector Graphics) element where D3.js</span></span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a><span class="co">       will draw the chart. The viewBox establishes the chart's</span></span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a><span class="co">       coordinate system and dimensions (800 x 450). --&gt;</span></span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a><span class="dt">&lt;/</span><span class="kw">div</span><span class="dt">&gt;</span></span>
+<span id="cb3-10"><a href="#cb3-10" aria-hidden="true" tabindex="-1"></a><span class="co">&lt;!-- Closes the chart container. --&gt;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<ol start="3" type="1">
+<li>Data transfer to Javascript</li>
+</ol>
+<div class="code-copy-outer-scaffold"><div class="sourceCode" id="cb4"><pre class="sourceCode markdown code-with-copy"><code class="sourceCode markdown"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a><span class="fu"># following 2 lines essentially says "run this code but don't show it"</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>#| echo: false</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>#| results: asis</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a><span class="fu"># Inserts the JSON-formatted mobulid dataset into the webpage</span></span>
+<span id="cb4-6"><a href="#cb4-6" aria-hidden="true" tabindex="-1"></a><span class="fu"># as a JavaScript variable called "mobulidData".</span></span>
+<span id="cb4-7"><a href="#cb4-7" aria-hidden="true" tabindex="-1"></a><span class="fu"># This makes the R dataset accessible to the D3.js chart code.</span></span>
+<span id="cb4-8"><a href="#cb4-8" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb4-9"><a href="#cb4-9" aria-hidden="true" tabindex="-1"></a>cat(</span>
+<span id="cb4-10"><a href="#cb4-10" aria-hidden="true" tabindex="-1"></a>  '<span class="dt">&lt;</span><span class="kw">script</span><span class="dt">&gt;</span></span>
+<span id="cb4-11"><a href="#cb4-11" aria-hidden="true" tabindex="-1"></a>  <span class="kw">const</span> mobulidData <span class="op">=</span> <span class="st">',</span></span>
+<span id="cb4-12"><a href="#cb4-12" aria-hidden="true" tabindex="-1"></a>  mobulid_json<span class="op">,</span></span>
+<span id="cb4-13"><a href="#cb4-13" aria-hidden="true" tabindex="-1"></a>  <span class="st">';</span></span>
+<span id="cb4-14"><a href="#cb4-14" aria-hidden="true" tabindex="-1"></a>  <span class="dt">&lt;/</span><span class="kw">script</span><span class="dt">&gt;</span>'</span>
+<span id="cb4-15"><a href="#cb4-15" aria-hidden="true" tabindex="-1"></a>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+<p>This is a lot of information if you are not familiar with Javascript! Fear not. If you want to replicate this code chunk, all you need to worry about here is reading your own data in the read.csv() line, where you specify the file path to your own dataset. The remaining code can stay as is.</p>
+<p>Now, stage 4) Developing the figure<br>
+This chunk of code is annotated, so I will go over the summary concepts here but refer to the <a href="https://github.com/IsabellaGarfield/SciCom_project/blob/main/index.qmd">index.qmd</a> lines 57 - 146 for reference on which code chunks to alter specifically. The following is a summary:</p>
+<ul>
+<li>width, height: Overall chart dimensions</li>
+<li>margin: Spacing around the chart</li>
+<li>xScale.domain(): X-axis range</li>
+<li>yScale: Variable being plotted</li>
+<li>.text(): Axis labels</li>
+<li>.x() and .y(): Dataset column references</li>
+<li>.attr(“stroke”): Line color</li>
+<li>.attr(“stroke-width”): Line thickness</li>
+<li>start and end: When the scroll animation begins and finishes</li>
+</ul>
+</details>
+</section>
+<section id="custom.css" class="level2">
+<h2 class="anchored" data-anchor-id="custom.css">custom.css</h2>
+<p>This <a href="https://github.com/IsabellaGarfield/SciCom_project/blob/main/assets/custom.css">file</a> (located in folder assets/custom.css) is vital for aesthetics! As of now, this file manipulates the blue/white webpage color palettes (Page-themes) and detailed instructions for the Hero layout - which is the large photo / web page title banner displayed on the home page.</p>
+<section id="page-themes" class="level3">
+<h3 class="anchored" data-anchor-id="page-themes">Page-themes</h3>
+<p>This short chunk of code specifies webpage color themes. Any themes specified here overwrites the _quarto.yml theme designation.</p>
+<pre><code>#Page-themes
+body {background-color: #F7F8F5;}
+
+.navbar {background-color: #123B4A;}
+
+.navbar a {color: #F7F8F5;}
+
+a {color: #2D7180;}</code></pre>
+<ul>
+<li>body - sets overall webpage background color</li>
+<li>.navbar - sets background and contrast color palette</li>
+<li>a - sets default color of hyperlinks throughout webpage</li>
+</ul>
+</section>
+<section id="hero" class="level3">
+<h3 class="anchored" data-anchor-id="hero">Hero</h3>
+<p>The Hero CSS <a href="https://github.com/IsabellaGarfield/SciCom_project/blob/06f4a46314d686cf21ef95df0b98cc6306b49b9c/assets/custom.css#L10">chunk</a> is organized into several sections that control the banner’s appearance, including the hero container dimensions, background image (where you will need to update the image filepath if using a different image), title and subtitle font styling, and overall positioning. Although this section of code is relatively long, it is annotated throughout, so refer to the CSS file for more detailed guidance when making changes.</p>
+<p>The CSS establishes the Hero’s visual layout and styling, while the HTML chunk in index.qmd calls these elements into the webpage and provides the actual title and subtitle.</p>
+</section>
+</section>
+<section id="quarto.yml" class="level2">
+<h2 class="anchored" data-anchor-id="quarto.yml">_quarto.yml</h2>
+<p>While the individual .qmd files (quarto pages) determine the content on each individual web page, the _quarto.yml serves as the ‘spine’ that binds the pages together (among other things…) so it is important to understand how to change this file to manipulate web page structure.I will link <a href="https://openscapes.github.io/quarto-website-tutorial/quarto-workflows/">this resource</a> as another helpful tool to navigate this document, but wanted to include some additional key notes:</p>
+<ul>
+<li><p>This is a YAML document (“Yet Another Markup Language” can be finicky with syntax, use <a href="https://yamlchecker.com/">YAML Validator</a> to check your code if running into issues)</p></li>
+<li><p>‘navbar:’ this is where you add, remove, or rearrange the individual web pages for your website. ‘href’ identifies the filepath to the .qmd page (quarto page), and ‘text’ identifies how you want the name to appear on the website.</p></li>
+<li><p>‘tools’: There is a globe icon and a github icon that appear on the page that you can assign links to. I use this to link the github’s specific repository so viewers can easily navigate to the corresponding code, and the globe icon links to the home page of the website.</p></li>
+<li><p>‘format’: you can change website themes (i.e.&nbsp;changing ‘cosmic’ to one of the many <a href="https://quarto.org/docs/output-formats/html-themes.html">quarto options</a>! For a fun one, try changing cosmic to ‘quartz’ to get a rainbow background theme :))</p></li>
+</ul>
 
 
+</section>
 
 </main> <!-- /main -->
 <script id="quarto-html-after-body" type="application/javascript">
@@ -211,7 +401,7 @@ ul.task-list li input[type="checkbox"] {
     }
       var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
       var mailtoRegex = new RegExp(/^mailto:/);
-        var filterRegex = new RegExp("https:\/\/openscapes\.github\.io\/quarto-website-tutorial");
+        var filterRegex = new RegExp("https:\/\/isabellagarfield\.github\.io\/SciCom_project\/");
       var isInternal = (href) => {
           return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
       }
@@ -539,21 +729,8 @@ ul.task-list li input[type="checkbox"] {
   });
   </script>
 </div> <!-- /content -->
-<footer class="footer">
-  <div class="nav-footer">
-    <div class="nav-footer-left">
-<p>© CC-By Openscapes, 2024</p>
-</div>   
-    <div class="nav-footer-center">
-      &nbsp;
-    <div class="toc-actions"><ul><li><a href="https://github.com/openscapes/quarto-website-tutorial/edit/main/content/About.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/openscapes/quarto-website-tutorial/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div>
-    <div class="nav-footer-right">
-<p>This page is built with ❤️ and <a href="https://quarto.org/">Quarto</a>.</p>
-</div>
-  </div>
-</footer>
 
 
 
 
-</body></html>
+<footer class="footer"><div class="nav-footer"><div class="nav-footer-center"><div class="toc-actions"><ul><li><a href="https://github.com/IsabellaGarfield/SciCom_project/edit/main/content/About.qmd" class="toc-action"><i class="bi bi-github"></i>Edit this page</a></li><li><a href="https://github.com/IsabellaGarfield/SciCom_project/issues/new" class="toc-action"><i class="bi empty"></i>Report an issue</a></li></ul></div></div></div></footer></body></html>
