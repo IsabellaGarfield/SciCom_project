@@ -1,6 +1,7 @@
 ---
 title: "How to use this template"
 format: html
+page-layout: full
 ---
 This GitHub repository is designed to showcase how R and Javascript can work together to produce interactive scientific storytelling. This repository uses Quarto pages as it's visual platform, allowing all code used in the project's development to be copied and modified for those interested in applying this tool towards their own scientific use. This page serves as a reference for understanding key files and code sections, making future modifications and troubleshooting easier. 
 
