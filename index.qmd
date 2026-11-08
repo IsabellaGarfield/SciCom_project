@@ -22,11 +22,12 @@ Photo credit: TUNACONS
 :::
 \
 
-## Using ggplotly
+## Using [ggplotly](https://plotly.com/examples/)
 
 ```{r}
 #| echo: false
-#| results: asis
+#| message: false
+#| warning: false
 
 library(tidyverse)
 library(plotly)
@@ -40,14 +41,109 @@ p <- ggplot(data, aes(x = Year)) +
   geom_line(aes(y = NOA, color = "Non-associated sets")) +
   geom_line(aes(y = DEL, color = "Dolphin sets")) +
   labs(
-    title = "Bycatch and Fishing Effort Over Time",
+    title = "Trends of set-type use in the EPO tuna purse seine fishery",
     x = "Year",
     y = "Number of Sets",
     color = "Variable"
   ) +
-  theme_minimal()
+  theme_classic()
 
 # Make interactive
 ggplotly(p)
+```
+
+##GGriaph
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(ggiraph) # install.packages('ggiraph')
+library(ggplot2) # install.packages('ggplot2')
+library(dplyr) # install.packages('dplyr')
+library(patchwork) # install.packages('patchwork')
+library(tidyr) # install.packages('tidyr')
+library(sf) # install.packages('sf')
+library(tidyverse)
+set.seed(123)
+
+data.2 <- read_csv("Data/IATTC_flag.csv") 
+  
+# Create lookup table
+flag_lookup <- tribble(
+  ~BanderaFlag,       ~Country,
+  "CHL",         "Chile",
+  "USA",         "United States of America",
+  "JPN",         "Japan",
+  "PER",         "Peru",
+  "COL",         "Colombia",
+  "ECU",         "Ecuador",
+  "MEX",         "Mexico",
+  "PAN",         "Panama",
+  "CAN",         "Canada",
+  "TWN",         "Taiwan",
+  "ESP",         "Spain",
+  "CRI",         "Costa Rica",
+  "NLD",         "Netherlands",
+  "BMU",         "Bermuda",
+  "KOR",         "South Korea",
+  "SEN",         "Senegal",
+  "VEN",         "Venezuela",
+  "CYM",         "Cayman Islands",
+  "VUT",         "Vanuatu",
+  "PYF",         "French Polynesia",
+  "GTM",         "Guatemala",
+  "BLZ",         "Belize",
+  "CHN",         "China",
+  "SLV",         "El Salvador",
+  "FRA (PYF)",   "French Polynesia",
+  "EU (ESP)",    "Spain",
+  "HND",         "Honduras",
+  "NIC",         "Nicaragua"
+)
+
+# Remove UNK and add full country names
+data.2_filt <- data.2 %>%
+  filter(BanderaFlag != "UNK") %>%
+  filter(BanderaFlag != "OTR") %>%
+  left_join(flag_lookup, by = "BanderaFlag") %>%
+  filter(ArteGear == "PS") %>%
+  filter(AnoYear > 2005) 
+
+# Read the full world map
+world_sf <- read_sf("https://raw.githubusercontent.com/holtzy/R-graph-gallery/master/DATA/world.geojson")
+world_sf <- world_sf %>%
+  filter(!name %in% c("Antarctica", "Greenland"))
+
+# Join the happiness data with the full world map
+world_sf <- world_sf %>%
+  left_join(data.2_filt, by = c("name" = "Country"))
+
+# Create the third chart (choropleth)
+p3 <- ggplot() +
+  geom_sf(data = world_sf, fill = "lightgrey", color = "lightgrey") +
+  geom_sf_interactive(
+    data = filter(world_sf, !is.na(t)),
+    aes(fill = name, tooltip = name, data_id = name)
+  ) +
+  coord_sf(crs = st_crs(3857)) +
+  theme_void() +
+  theme(
+    axis.title.x = element_blank(),
+    axis.title.y = element_blank(),
+    legend.position = "none"
+  )
+
+# Combine the plots
+combined_plot <- (p3)
+
+# Create the interactive plot
+interactive_plot <- girafe(ggobj = combined_plot)
+interactive_plot <- girafe_options(
+  interactive_plot,
+  opts_hover(css = "fill:red;stroke:black;")
+)
+# Display the interactive plot
+interactive_plot
 ```
 
