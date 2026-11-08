@@ -15,6 +15,10 @@ website:
 
       - text: How-To
         href: content/About.qmd
+        
+      - text: Fun with javascript
+        href: content/test.qmd
+        
     tools: 
       - icon: globe
         href: https://isabellagarfield.github.io/SciCom_project/

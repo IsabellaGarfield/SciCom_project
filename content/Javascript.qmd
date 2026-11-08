@@ -1,0 +1,523 @@
+---
+title: "Fun with Javascript"
+format: html
+page-layout: full
+---
+
+## Catch trends
+Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations. 
+```{r}
+#| echo: false
+
+library(jsonlite)
+
+mobulid_data <- read.csv("../Data/mob_set_summary.csv")
+set_data <- read.csv("../Data/sum_set_year.csv")
+
+chart_json <- toJSON(
+  list(
+    mobulids = mobulid_data,
+    sets = set_data
+  ),
+  dataframe = "rows",
+  auto_unbox = TRUE,
+  na = "null"
+)
+
+```
+
+```{=html}
+<section id="mobulid-scroll-story">
+  <div id="mobulid-scroll-chart">
+    <svg id="mobulid-svg" viewBox="0 0 800 500"></svg>
+  </div>
+</section>
+```
+
+```{r}
+#| echo: false
+#| results: asis
+
+cat(
+  '<script>
+  const chartData = ',
+  chart_json,
+  ';
+  </script>'
+)
+```
+
+
+<script>
+
+// ============================================================
+// 1. DATA AND SVG SETUP
+// ============================================================
+
+// Access datasets prepared in R
+const mobulidData = chartData.mobulids;
+const setData = chartData.sets;
+
+// CHANGE THIS to match your mobulid count column
+const mobulidCountColumn = "mob_sets";
+
+const svg = d3.select("#mobulid-svg");
+const story = document.getElementById("mobulid-scroll-story");
+const container = d3.select("#mobulid-scroll-chart");
+
+// Chart dimensions
+const width = 800;
+const height = 500;
+
+const margin = {
+  top: 40,
+  right: 95,
+  bottom: 100,
+  left: 80
+};
+
+const bottom = height - margin.bottom;
+const right = width - margin.right;
+const plotHeight = bottom - margin.top;
+
+// Line and axis colors
+const mobColor = "#2F6F7E";
+const setColor = "#C17A32";
+
+// Set-type line styles
+const setTypes = ["NOA", "OBJ", "DEL"];
+
+const setStyles = {
+  NOA: null,       // Solid
+  OBJ: "9 5",      // Dashed
+  DEL: "2 5"       // Dotted
+};
+
+// Sort both datasets chronologically
+mobulidData.sort((a, b) => +a.Year - +b.Year);
+setData.sort((a, b) => +a.Year - +b.Year);
+
+
+// ============================================================
+// 2. SCALES
+// ============================================================
+
+// Shared x-axis
+const allYears = [
+  ...mobulidData.map(d => +d.Year),
+  ...setData.map(d => +d.Year)
+];
+
+const xScale = d3.scaleLinear()
+  .domain(d3.extent(allYears))
+  .range([margin.left, right]);
+
+// Left y-axis: sets with mobulid captures
+const mobMax = d3.max(
+  mobulidData,
+  d => +d[mobulidCountColumn]
+) || 1;
+
+const yScaleLeft = d3.scaleLinear()
+  .domain([0, mobMax])
+  .nice()
+  .range([bottom, margin.top]);
+
+// Right y-axis: total fishing sets
+const setMax = d3.max(setData, d =>
+  d3.max(setTypes, type => +d[type] || 0)
+) || 1;
+
+const yScaleRight = d3.scaleLinear()
+  .domain([0, setMax])
+  .nice()
+  .range([bottom, margin.top]);
+
+// Figure title
+const chartTitle = svg.append("text")
+  .attr("class", "chart-title")
+  .attr("x", (margin.left + right) / 2)
+  .attr("y", 20)
+  .attr("text-anchor", "middle")
+  .style("font-size", "20px")
+  .style("font-weight", "bold")
+  .style("fill", "#2F6F7E")
+  .text("Mobulid bycatch events over time");
+
+// ============================================================
+// 3. AXES AND LABELS
+// ============================================================
+
+// Bottom x-axis
+svg.append("g")
+  .attr("transform", `translate(0,${bottom})`)
+  .call(d3.axisBottom(xScale).tickFormat(d3.format("d")));
+
+// Left y-axis
+const leftAxis = svg.append("g")
+  .attr("transform", `translate(${margin.left},0)`)
+  .call(d3.axisLeft(yScaleLeft));
+
+leftAxis.selectAll("path, line")
+  .attr("stroke", mobColor);
+
+leftAxis.selectAll("text")
+  .attr("fill", mobColor);
+
+// Right y-axis clipping mask
+// Allows the axis to grow upward from the bottom
+const axisReveal = svg.append("defs")
+  .append("clipPath")
+  .attr("id", "axis-reveal-clip")
+  .attr("clipPathUnits", "userSpaceOnUse")
+  .append("rect")
+  .attr("x", 0)
+  .attr("y", bottom)
+  .attr("width", 100)
+  .attr("height", 0);
+
+// Right y-axis
+const rightAxis = svg.append("g")
+  .attr("transform", `translate(${right},0)`)
+  .attr("clip-path", "url(#axis-reveal-clip)")
+  .call(d3.axisRight(yScaleRight));
+
+rightAxis.selectAll("path, line")
+  .attr("stroke", setColor);
+
+rightAxis.selectAll("text")
+  .attr("fill", setColor);
+
+// X-axis label
+svg.append("text")
+  .attr("x", width / 2)
+  .attr("y", height - 65)
+  .attr("text-anchor", "middle")
+  .text("Year");
+
+// Left y-axis label
+svg.append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("x", -(height / 2))
+  .attr("y", 22)
+  .attr("text-anchor", "middle")
+  .attr("fill", mobColor)
+  .text("Sets with bycatch");
+
+// Right y-axis label
+const rightLabel = svg.append("text")
+  .attr("transform", "rotate(90)")
+  .attr("x", height / 2)
+  .attr("y", -width + 15)
+  .attr("text-anchor", "middle")
+  .attr("fill", setColor)
+  .attr("opacity", 0)
+  .text("Total sets");
+
+
+// ============================================================
+// 4. MOBULID SET LINE
+// ============================================================
+
+const mobulidLine = d3.line()
+  .x(d => xScale(+d.Year))
+  .y(d => yScaleLeft(+d[mobulidCountColumn]));
+
+const mobPath = svg.append("path")
+  .datum(mobulidData)
+  .attr("d", mobulidLine)
+  .attr("fill", "none")
+  .attr("stroke", mobColor)
+  .attr("stroke-width", 3);
+
+// Measure line length for scroll animation
+const mobLength = mobPath.node().getTotalLength();
+
+// Hide line until scrolling begins
+mobPath
+  .attr("stroke-dasharray", mobLength)
+  .attr("stroke-dashoffset", mobLength);
+
+
+// ============================================================
+// 5. SET-TYPE LINES
+// ============================================================
+
+// Line generator using right y-axis
+const setLine = d3.line()
+  .x(d => xScale(+d.Year))
+  .y(d => yScaleRight(+d.value));
+
+// Store line paths and their clipping masks
+const setPaths = setTypes.map((type, i) => {
+
+  // Reshape data for D3
+  const values = setData.map(d => ({
+    Year: d.Year,
+    value: +d[type] || 0
+  }));
+
+  // Create individual clipping mask
+  const clipId = `set-clip-${i}`;
+
+  const reveal = svg.append("defs")
+    .append("clipPath")
+    .attr("id", clipId)
+    .attr("clipPathUnits", "userSpaceOnUse")
+    .append("rect")
+    .attr("x", margin.left)
+    .attr("y", margin.top)
+    .attr("width", 0)
+    .attr("height", plotHeight);
+
+  // Draw set-type line
+  const path = svg.append("path")
+    .datum(values)
+    .attr("d", setLine)
+    .attr("fill", "none")
+    .attr("stroke", setColor)
+    .attr("stroke-width", 2.5)
+    .attr("stroke-dasharray", setStyles[type] || "none")
+    .attr("stroke-linecap", "round")
+    .attr("clip-path", `url(#${clipId})`);
+
+  return { type, path, reveal, clipId };
+});
+
+
+
+// ============================================================
+// 6. INTERACTIVE TOOLTIPS + HOVER HIGHLIGHT
+// ============================================================
+
+// Add your descriptions and image paths here
+const setInfo = {
+  NOA: {
+    title: "NOA Sets",
+    description: "Add your description of NOA sets here.",
+    image: "images/noa_sets.jpg"
+  },
+  OBJ: {
+    title: "OBJ Sets",
+    description: "Add your description of OBJ sets here.",
+    image: "images/obj_sets.jpg"
+  },
+  DEL: {
+    title: "DEL Sets",
+    description: "Add your description of DEL sets here.",
+    image: "images/del_sets.jpg"
+  }
+};
+
+// Create tooltip using fixed positioning
+const tooltip = container.append("div")
+  .attr("class", "set-tooltip")
+  .style("position", "fixed")
+  .style("opacity", 0)
+  .style("pointer-events", "none");
+
+// Add wider invisible paths to make hovering easier
+setPaths.forEach(({ type, path, clipId }) => {
+
+  const hitPath = svg.append("path")
+    .datum(path.datum())
+    .attr("d", setLine)
+    .attr("fill", "none")
+    .attr("stroke", "transparent")
+    .attr("stroke-width", 16)
+    .attr("pointer-events", "stroke")
+    .attr("clip-path", `url(#${clipId})`);
+
+  hitPath
+    .on("pointerenter", () => {
+
+      // Fade the other two set-type lines
+      setPaths.forEach(({ type: otherType, path: otherPath }) => {
+
+        otherPath
+          .transition()
+          .duration(200)
+          .style("opacity", otherType === type ? 1 : 0.2);
+
+      });
+
+      // Show tooltip
+      const info = setInfo[type];
+
+      tooltip
+        .html(`
+          <h3>${info.title}</h3>
+          <img src="${info.image}" alt="${info.title}">
+          <p>${info.description}</p>
+        `)
+        .style("opacity", 1);
+
+    })
+    .on("pointermove", event => {
+
+      tooltip
+        .style("left", `${event.clientX + 12}px`)
+        .style("top", `${event.clientY + 12}px`);
+
+    })
+    .on("pointerleave", () => {
+
+      // Restore all three lines
+      setPaths.forEach(({ path }) => {
+
+        path
+          .transition()
+          .duration(200)
+          .style("opacity", 1);
+
+      });
+
+      tooltip.style("opacity", 0);
+
+    });
+
+});
+
+// ============================================================
+// 7. FINAL FIGURE LEGEND
+// ============================================================
+
+// Legend appears only after all lines finish drawing
+const legend = svg.append("g")
+  .attr("transform", "translate(120,470)")
+  .attr("opacity", 0);
+
+// Mobulid legend entry
+const mobLegend = legend.append("g")
+  .attr("transform", "translate(0,0)");
+
+mobLegend.append("line")
+  .attr("x1", 0)
+  .attr("x2", 30)
+  .attr("y1", 0)
+  .attr("y2", 0)
+  .attr("stroke", mobColor)
+  .attr("stroke-width", 3);
+
+mobLegend.append("text")
+  .attr("x", 38)
+  .attr("y", 5)
+  .text("Mobulid captures");
+
+// Set-type legend entries
+setTypes.forEach((type, i) => {
+
+  const item = legend.append("g")
+    .attr("transform", `translate(${220 + i * 125},0)`);
+
+  item.append("line")
+    .attr("x1", 0)
+    .attr("x2", 30)
+    .attr("y1", 0)
+    .attr("y2", 0)
+    .attr("stroke", setColor)
+    .attr("stroke-width", 2.5)
+    .attr("stroke-dasharray", setStyles[type] || "none");
+
+  item.append("text")
+    .attr("x", 38)
+    .attr("y", 5)
+    .text(type);
+
+});
+
+
+// ============================================================
+// 8. TWO-STAGE SCROLL ANIMATION
+// ============================================================
+
+function updateChart() {
+
+  const stickyHeight = container.node().getBoundingClientRect().height;
+  const stickyTop = window.innerHeight * 0.1;
+
+  // Find the start and end of the sticky scroll section
+  const sectionTop = story.getBoundingClientRect().top + window.scrollY;
+
+  const start = sectionTop - stickyTop;
+  const end = sectionTop + story.offsetHeight - stickyHeight - stickyTop;
+
+  // Overall scroll progress: 0 to 1
+  let progress = (window.scrollY - start) / (end - start);
+
+  progress = Math.max(0, Math.min(1, progress));
+
+
+  // ----------------------------------------------------------
+  // STAGE 1: Mobulid line (first 50% of scrolling)
+  // ----------------------------------------------------------
+
+  const mobProgress = Math.min(progress / 0.5, 1);
+
+  mobPath.attr(
+    "stroke-dashoffset",
+    mobLength * (1 - mobProgress)
+  );
+
+
+  // ----------------------------------------------------------
+  // STAGE 2: Fishing effort (second 50% of scrolling)
+  // ----------------------------------------------------------
+
+  const secondProgress = Math.max(
+    0,
+    Math.min(1, (progress - 0.5) / 0.5)
+  );
+
+  // First 15%: reveal right y-axis from bottom upward
+  const axisProgress = Math.min(secondProgress / 0.15, 1);
+
+  axisReveal
+    .attr("y", bottom - plotHeight * axisProgress)
+    .attr("height", plotHeight * axisProgress);
+
+  rightLabel.attr("opacity", axisProgress);
+
+// Change title as the second y-axis appears
+chartTitle
+  .text(
+    axisProgress > 0
+      ? "Changes in fishing methodologies used by the fleet"
+      : "Manta and devil ray bycatch events in the Eastern Pacific Ocean"
+  )
+  .style("fill", axisProgress > 0 ? "#C17A32" : "#2F6F7E");
+
+  // Remaining 85%: reveal NOA, OBJ, and DEL lines
+  const setProgress = Math.max(
+    0,
+    Math.min(1, (secondProgress - 0.15) / 0.85)
+  );
+
+  setPaths.forEach(({ reveal }) => {
+    reveal.attr(
+      "width",
+      (right - margin.left) * setProgress
+    );
+  });
+
+
+  // Final 8%: reveal legend
+  const legendProgress = Math.max(
+    0,
+    Math.min(1, (setProgress - 0.92) / 0.08)
+  );
+
+  legend.attr("opacity", legendProgress);
+
+}
+
+
+// Listen for scrolling and resizing
+window.addEventListener("scroll", updateChart, { passive: true });
+window.addEventListener("resize", updateChart);
+
+// Set correct initial appearance
+updateChart();
+
+
+</script>

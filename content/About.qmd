@@ -10,6 +10,18 @@ Having a basic understanding of [Github pages](https://quarto.org/docs/publishin
 
 To learn more about how Openscapes facilitates and supports open-science practices across groups such as NASA and NOAA, check out their [page](https://openscapes.org/). This project serves as a creative spinoff from what I learned in their NOAA Champions training.  
 
+## Coding languages
+
+| Task | language | purpose |
+|:------:|:------:|:------:|
+| Read CSV files   |    R |   Familiar data workflow   |
+| Clean and summarize data  |   R |  Use dplyr, tidyr, etc.   |
+| Combine datasets    |     R |   Easier to troubleshoot    |
+| Convert data to JSON    |     R |   Pass data to browser    |
+| Create axes and scales    |   JavaScript |  streamlined functionality for dynamic visualization    |
+| Draw and animate lines   | JavaScript |  Browser interaction    |
+| Create hover tooltips   | JavaScript + HTML/CSS |  Interactive elements    |
+| Customize aesthetics   | CSS |   Easier to maintain   |
 
 
 ## .qmd files
