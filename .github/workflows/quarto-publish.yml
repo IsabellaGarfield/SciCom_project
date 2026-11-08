@@ -1,3 +1,4 @@
+
 name: Render and Publish
 
 on:
@@ -28,10 +29,19 @@ jobs:
           packages: |
             any::knitr
             any::rmarkdown
+            any::ggiraph
+            any::ggplot2
+            any::dplyr
+            any::patchwork
+            any::tidyr
+            any::sf
+            any::tidyverse
+            any::plotly
+            any::scales
 
       - name: Check R packages
         run: |
-          Rscript -e 'library(knitr); library(rmarkdown); sessionInfo()'
+          Rscript -e 'library(knitr); library(rmarkdown); library(tidyverse); library(ggiraph); library(patchwork); library(sf); sessionInfo()'
 
       - name: Publish to GitHub Pages
         uses: quarto-dev/quarto-actions/publish@v2
