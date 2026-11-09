@@ -14,11 +14,25 @@
     "text": "Photo credit: TUNACONS"
   },
   {
-    "objectID": "index.html#catch-trends",
-    "href": "index.html#catch-trends",
+    "objectID": "index.html#using-ggplotly",
+    "href": "index.html#using-ggplotly",
     "title": "Who Drives Bycatch?",
-    "section": "Catch trends",
-    "text": "Catch trends\nManta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
+    "section": "Using ggplotly",
+    "text": "Using ggplotly\n\n\n\n\n\n\n##GGriaph"
+  },
+  {
+    "objectID": "content/test.html",
+    "href": "content/test.html",
+    "title": "",
+    "section": "",
+    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
+  },
+  {
+    "objectID": "content/test.html#catch-trends",
+    "href": "content/test.html#catch-trends",
+    "title": "",
+    "section": "",
+    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
   },
   {
     "objectID": "content/About.html",
@@ -26,6 +40,13 @@
     "title": "How to use this template",
     "section": "",
     "text": "This GitHub repository is designed to showcase how R and Javascript can work together to produce interactive scientific storytelling. This repository uses Quarto pages as it’s visual platform, allowing all code used in the project’s development to be copied and modified for those interested in applying this tool towards their own scientific use. This page serves as a reference for understanding key files and code sections, making future modifications and troubleshooting easier.\nHaving a basic understanding of Github pages will help immensely for navigating this repository. This repository was forked from Openscapes Quarto tutorial repository, which offers an incredibly helpful beginner-friendly template and learning resources for new users.\nTo learn more about how Openscapes facilitates and supports open-science practices across groups such as NASA and NOAA, check out their page. This project serves as a creative spinoff from what I learned in their NOAA Champions training."
+  },
+  {
+    "objectID": "content/About.html#coding-languages",
+    "href": "content/About.html#coding-languages",
+    "title": "How to use this template",
+    "section": "Coding languages",
+    "text": "Coding languages\n\n\n\n\n\n\n\n\nTask\nlanguage\npurpose\n\n\n\n\nRead CSV files\nR\nFamiliar data workflow\n\n\nClean and summarize data\nR\nUse dplyr, tidyr, etc.\n\n\nCombine datasets\nR\nEasier to troubleshoot\n\n\nConvert data to JSON\nR\nPass data to browser\n\n\nCreate axes and scales\nJavaScript\nstreamlined functionality for dynamic visualization\n\n\nDraw and animate lines\nJavaScript\nBrowser interaction\n\n\nCreate hover tooltips\nJavaScript + HTML/CSS\nInteractive elements\n\n\nCustomize aesthetics\nCSS\nEasier to maintain"
   },
   {
     "objectID": "content/About.html#qmd-files",

@@ -74,3 +74,37 @@ a {color: #2D7180;}
   overflow: hidden;
   margin-left: calc(50% - 50vw);
 }
+
+
+
+#mobulid-scroll-story {
+  position: relative;
+  min-height: 300vh;
+}
+
+#mobulid-scroll-chart {
+  position: sticky;
+  top: 10vh;
+  height: 80vh;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+#mobulid-svg {
+  width: min(100%, 1000px);
+  height: auto;
+  max-height: 80vh;
+  overflow: visible;
+}
+
+.set-tooltip {
+  z-index: 100;
+  width: 240px;
+  padding: 12px;
+  background: white;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+}
