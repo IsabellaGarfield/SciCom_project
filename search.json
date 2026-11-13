@@ -14,25 +14,32 @@
     "text": "Photo credit: TUNACONS"
   },
   {
-    "objectID": "index.html#using-ggplotly",
-    "href": "index.html#using-ggplotly",
+    "objectID": "index.html#the-fishery",
+    "href": "index.html#the-fishery",
     "title": "Who Drives Bycatch?",
-    "section": "Using ggplotly",
-    "text": "Using ggplotly\n\n\n\n\n\n\n##GGriaph"
+    "section": "The fishery",
+    "text": "The fishery\nThe eastern Pacific ocean catches roughly 700,000 metric tons of tuna annually."
   },
   {
-    "objectID": "content/test.html",
-    "href": "content/test.html",
-    "title": "",
-    "section": "",
-    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
+    "objectID": "index.html#ggriaph",
+    "href": "index.html#ggriaph",
+    "title": "Who Drives Bycatch?",
+    "section": "GGriaph",
+    "text": "GGriaph\n\n\n\n\n\n\nThe EPO purse seine fishery uses different approaches to catch tuna.\nNon-Associated sets\nDolphin sets\nObject sets\n\nUsing ggplotly"
   },
   {
-    "objectID": "content/test.html#catch-trends",
-    "href": "content/test.html#catch-trends",
-    "title": "",
-    "section": "",
-    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
+    "objectID": "index.html#bycatch",
+    "href": "index.html#bycatch",
+    "title": "Who Drives Bycatch?",
+    "section": "Bycatch",
+    "text": "Bycatch\nTuna purse seine fisheries don’t just catch tuna - dolphins, sharks and rays represent key bycatch species that are often caught incidentally."
+  },
+  {
+    "objectID": "index.html#as-the-use-of-object-sets-increase-instances-of-shark-bycatch-increase",
+    "href": "index.html#as-the-use-of-object-sets-increase-instances-of-shark-bycatch-increase",
+    "title": "Who Drives Bycatch?",
+    "section": "As the use of object sets increase, instances of shark bycatch increase",
+    "text": "As the use of object sets increase, instances of shark bycatch increase"
   },
   {
     "objectID": "content/About.html",
@@ -68,5 +75,19 @@
     "title": "How to use this template",
     "section": "_quarto.yml",
     "text": "_quarto.yml\nWhile the individual .qmd files (quarto pages) determine the content on each individual web page, the _quarto.yml serves as the ‘spine’ that binds the pages together (among other things…) so it is important to understand how to change this file to manipulate web page structure.I will link this resource as another helpful tool to navigate this document, but wanted to include some additional key notes:\n\nThis is a YAML document (“Yet Another Markup Language” can be finicky with syntax, use YAML Validator to check your code if running into issues)\n‘navbar:’ this is where you add, remove, or rearrange the individual web pages for your website. ‘href’ identifies the filepath to the .qmd page (quarto page), and ‘text’ identifies how you want the name to appear on the website.\n‘tools’: There is a globe icon and a github icon that appear on the page that you can assign links to. I use this to link the github’s specific repository so viewers can easily navigate to the corresponding code, and the globe icon links to the home page of the website.\n‘format’: you can change website themes (i.e. changing ‘cosmic’ to one of the many quarto options! For a fun one, try changing cosmic to ‘quartz’ to get a rainbow background theme :))"
+  },
+  {
+    "objectID": "content/test.html",
+    "href": "content/test.html",
+    "title": "",
+    "section": "",
+    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
+  },
+  {
+    "objectID": "content/test.html#catch-trends",
+    "href": "content/test.html#catch-trends",
+    "title": "",
+    "section": "",
+    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
   }
 ]
