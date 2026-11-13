@@ -38,10 +38,14 @@ jobs:
             any::tidyverse
             any::plotly
             any::scales
+            any::hrbrthemes
+            any::lubridate
+            any::gganimate
+            any::viridis
 
       - name: Check R packages
         run: |
-          Rscript -e 'library(knitr); library(rmarkdown); library(tidyverse); library(ggiraph); library(patchwork); library(sf); sessionInfo()'
+          Rscript -e 'library(knitr); library(rmarkdown); library(tidyverse); library(ggiraph); library(patchwork); library(sf); library(hrbrthemes); library(lubridate); library(gganimate); library(viridis); sessionInfo()'
 
       - name: Publish to GitHub Pages
         uses: quarto-dev/quarto-actions/publish@v2
