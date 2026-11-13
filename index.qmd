@@ -378,7 +378,7 @@ shark_dat_setyear <- shark_dat_settype %>%
 # Plot
 shark_long <- shark_dat_setyear %>%
   pivot_longer(
-    c(total_silky, total_obj, total_noa, total_del),
+    c(total_silky, total_obj),
     names_to = "Species",
     values_to = "Total"
   )
