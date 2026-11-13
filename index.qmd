@@ -22,37 +22,12 @@ Photo credit: TUNACONS
 :::
 \
 
-## Using [ggplotly](https://plotly.com/examples/)
+## The fishery
 
-```{r}
-#| echo: false
-#| message: false
-#| warning: false
+The eastern Pacific ocean catches roughly 700,000 metric tons of tuna annually. 
 
-library(tidyverse)
-library(plotly)
 
-# Load your data
-data <- read_csv("Data/sum_set_year.csv")
-
-# Create figure
-p <- ggplot(data, aes(x = Year)) +
-  geom_line(aes(y = OBJ, color = "Object sets")) +
-  geom_line(aes(y = NOA, color = "Non-associated sets")) +
-  geom_line(aes(y = DEL, color = "Dolphin sets")) +
-  labs(
-    title = "Trends of set-type use in the EPO tuna purse seine fishery",
-    x = "Year",
-    y = "Number of Sets",
-    color = "Variable"
-  ) +
-  theme_classic()
-
-# Make interactive
-ggplotly(p)
-```
-
-##GGriaph
+## GGriaph
 ```{r}
 #| echo: false
 #| message: false
@@ -106,44 +81,325 @@ flag_lookup <- tribble(
 data.2_filt <- data.2 %>%
   filter(BanderaFlag != "UNK") %>%
   filter(BanderaFlag != "OTR") %>%
+  filter(BanderaFlag != "GTM") %>%
   left_join(flag_lookup, by = "BanderaFlag") %>%
   filter(ArteGear == "PS") %>%
   filter(AnoYear > 2005) 
 
-# Read the full world map
-world_sf <- read_sf("https://raw.githubusercontent.com/holtzy/R-graph-gallery/master/DATA/world.geojson")
-world_sf <- world_sf %>%
+# Summarize total catch by country AND year (for time series)
+year_country <- data.2_filt %>%
+  filter(!is.na(Country)) %>%
+  group_by(Country, AnoYear) %>%
+  summarise(t = sum(t, na.rm = TRUE), .groups = "drop")
+
+# Summarize total catch by country across all years (for bar chart and map)
+country_totals <- year_country %>%
+  group_by(Country) %>%
+  summarise(total_t = sum(t, na.rm = TRUE), .groups = "drop")
+
+# Create one consistent color palette for all countries
+countries <- sort(unique(country_totals$Country))
+
+country_colors <- setNames(
+  scales::hue_pal()(length(countries)),
+  countries
+)
+
+# Read and filter world map
+world_base <- read_sf(
+  "https://raw.githubusercontent.com/holtzy/R-graph-gallery/master/DATA/world.geojson"
+) %>%
   filter(!name %in% c("Antarctica", "Greenland"))
 
-# Join the happiness data with the full world map
-world_sf <- world_sf %>%
-  left_join(data.2_filt, by = c("name" = "Country"))
+# Join country totals to map (one row per country)
+world_sf <- world_base %>%
+  left_join(country_totals, by = c("name" = "Country"))
 
-# Create the third chart (choropleth)
-p3 <- ggplot() +
-  geom_sf(data = world_sf, fill = "lightgrey", color = "lightgrey") +
-  geom_sf_interactive(
-    data = filter(world_sf, !is.na(t)),
-    aes(fill = name, tooltip = name, data_id = name)
-  ) +
-  coord_sf(crs = st_crs(3857)) +
-  theme_void() +
+#bar chart
+bar_data <- country_totals %>%
+  mutate(Country = reorder(Country, total_t))
+
+p1 <- ggplot(bar_data, aes(
+  x = Country,
+  y = total_t,
+  tooltip = Country,
+  data_id = Country,
+  fill = Country
+)) +
+  geom_col_interactive() +
+  coord_flip() +
+  scale_fill_manual(values = country_colors) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_minimal() +
   theme(
     axis.title.x = element_blank(),
     axis.title.y = element_blank(),
     legend.position = "none"
   )
 
+# Create the third chart (choropleth)
+world_sf <- world_sf %>%
+  left_join(data.2_filt, by = c("name" = "Country"))
+
+p2 <- ggplot() +
+  geom_sf(
+    data = world_sf,
+    fill = "lightgrey",
+    color = "lightgrey"
+  ) +
+  geom_sf_interactive(
+    data = filter(world_sf, !is.na(total_t)),
+    aes(
+      fill = name,
+      tooltip = name,
+      data_id = name
+    )
+  ) +
+  scale_fill_manual(values = country_colors) +
+  coord_sf(crs = st_crs(3857)) +
+  theme_void() +
+  theme(
+    legend.position = "none"
+  )
+
+#p3 species plot
+data.2_species <- data.2_filt %>%
+  group_by(EspeciesSpecies, Country) %>%
+  summarize(t = sum(t)) %>%
+  filter(EspeciesSpecies %in% c("BET", "YFT", "SKJ"))
+
+p3 <- ggplot(
+  data.2_species,
+  aes(
+    x = EspeciesSpecies,
+    y = t,
+    fill = Country,
+    group = Country,
+    tooltip = Country,
+    data_id = Country
+  )
+) +
+  geom_col_interactive(position = "fill") +
+  scale_color_manual(values = country_colors) +
+  scale_y_continuous(labels = scales::comma) +
+  theme_classic() +
+  theme(
+    legend.position = "none"
+  ) +
+  labs(
+    x = "Year",
+    y = "Total",
+    color = "Country"
+  )
+
 # Combine the plots
-combined_plot <- (p3)
+combined_plot <- (p1 + p3) / p2 + plot_layout(heights = c(1, 2))
 
 # Create the interactive plot
 interactive_plot <- girafe(ggobj = combined_plot)
+
 interactive_plot <- girafe_options(
   interactive_plot,
-  opts_hover(css = "fill:red;stroke:black;")
+  opts_hover(css = "fill:grey; stroke:none;"),
+  opts_hover_inv(css = "opacity:0.2;")
 )
 # Display the interactive plot
 interactive_plot
 ```
+
+The EPO purse seine fishery uses different approaches to catch tuna.\
+**Non-Associated sets**
+
+**Dolphin sets**
+
+**Object sets**
+
+### Using [ggplotly](https://plotly.com/examples/)
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+library(tidyverse)
+library(plotly)
+
+# Load your data
+data <- read_csv("Data/sum_set_year.csv")
+
+# Create figure
+p <- ggplot(data, aes(x = Year)) +
+  geom_line(aes(y = OBJ, color = "Object sets")) +
+  geom_line(aes(y = NOA, color = "Non-associated sets")) +
+  geom_line(aes(y = DEL, color = "Dolphin sets")) +
+  labs(
+    title = "Trends of set-type use in the EPO tuna purse seine fishery",
+    x = "Year",
+    y = "Number of Sets",
+    color = "Variable"
+  ) +
+  theme_classic()
+
+# Make interactive
+ggplotly(p)
+```
+
+## Bycatch
+
+Tuna purse seine fisheries don't just catch tuna - dolphins, sharks and rays represent key bycatch species that are often caught incidentally. 
+
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+shark_dat <- read_csv("Data/PublicPSSharkFlag.csv") 
+
+library(tidyverse)
+library(lubridate)
+library(ggiraph)
+library(hrbrthemes)
+
+shark_species <- c(
+  "FALn", "BSHn", "CCLn", "OCSn", "SEPNn",
+  "SKHn", "SPLn", "SPNn", "SPZn", "THRn"
+)
+
+shark_long <- shark_dat %>%
+  mutate(Date = make_date(Year, Month, 1)) %>%
+  pivot_longer(
+    cols = all_of(shark_species),
+    names_to = "Species",
+    values_to = "Captures"
+  ) %>%
+  group_by(Date, Species) %>%
+  summarise(
+    Captures = if (all(is.na(Captures))) {
+      NA_real_
+    } else {
+      sum(Captures, na.rm = TRUE)
+    },
+    .groups = "drop"
+  ) %>%
+  mutate(
+    Species = recode(
+      Species,
+      "FALn" = "Silky shark",
+      "BSHn" = "Blue shark",
+      "CCLn" = "Blacktip shark",
+      "OCSn" = "Oceanic whitetip shark",
+      "SEPNn" = "Pelagic thresher shark",
+      "SKHn" = "Shortfin mako",
+      "SPLn" = "Scalloped hammerhead",
+      "SPNn" = "Smooth hammerhead",
+      "SPZn" = "Great hammerhead",
+      "THRn" = "Thresher shark"
+    )
+  )
+
+plot <- ggplot(
+  shark_long,
+  aes(
+    x = Date,
+    y = Captures,
+    color = Species,
+    group = Species,
+    tooltip = paste0(
+      "Species: ", Species
+    ),
+    data_id = interaction(Species, Date)
+  )
+) +
+  geom_line_interactive(
+  linewidth = 0.4,
+  hover_nearest = TRUE
+) +
+  scale_x_date(
+  date_breaks = "2 years",
+  date_labels = "%Y"
+)+
+  scale_color_brewer(palette = "Paired") +
+  theme_classic() +
+  theme(
+  legend.position = c(0.02, 0.98),
+  legend.justification = c(0, 1),
+  legend.background = element_rect(
+  fill = scales::alpha("white", 0.8),
+  color = NA
+  ),
+  legend.title = element_text(size = 10),
+  legend.text = element_text(size = 9)
+) +
+  labs(
+    x = "Year / Month",
+    y = "Number of captures",
+    color = "Shark species",
+    title = "Monthly shark captures by species"
+  )
+
+interactive_plot <- girafe(ggobj = plot)
+
+interactive_plot <- girafe_options(
+  interactive_plot,
+  opts_hover(
+    css = "stroke-width:3px; opacity:1; transition:all 0.3s ease;"
+  ),
+  opts_hover_inv("opacity:0.15;"),
+  opts_toolbar(saveaspng = FALSE)
+)
+
+interactive_plot
+```
+
+
+## As the use of object sets increase, instances of shark bycatch increase
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+# libraries:
+library(ggplot2)
+library(gganimate)
+library(hrbrthemes)
+library(viridis)
+
+shark_dat_settype <- read_csv("Data/PublicPSSharkSetType.csv") 
+shark_dat_setyear <- shark_dat_settype %>%
+  group_by(Year) %>%
+  summarize(
+    total_del = sum(SetType == "DEL", na.rm = TRUE),
+    total_obj = sum(SetType == "OBJ", na.rm = TRUE),
+    total_noa = sum(SetType == "NOA", na.rm = TRUE),
+    total_silky = sum(FALn > 0, na.rm = TRUE)
+  )
+
+# Plot
+shark_long <- shark_dat_setyear %>%
+  pivot_longer(
+    c(total_silky, total_obj, total_noa, total_del),
+    names_to = "Species",
+    values_to = "Total"
+  )
+
+p <- ggplot(shark_long, aes(Year, Total, color = Species, group = Species)) +
+  geom_line(linewidth = 1) +
+  geom_point() +
+  scale_color_manual(
+  values = c(
+    "total_silky" = "red",
+    "total_obj" = "black"
+  ),
+  labels = c(
+    "total_silky" = "Instances of silky shark capture",
+    "total_obj" = "Object sets"
+  )
+) +
+   theme_classic() +
+  labs(x = "Year", y = "Total", color = NULL) +
+  transition_reveal(Year)
+
+animate(p)
+```
+
 
