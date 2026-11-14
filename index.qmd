@@ -103,8 +103,7 @@ countries <- sort(unique(country_totals$Country))
 
 country_colors <- setNames(
   scales::hue_pal()(length(countries)),
-  countries
-)
+  countries)
 
 # Read and filter world map
 world_base <- read_sf(
@@ -116,85 +115,65 @@ world_base <- read_sf(
 world_sf <- world_base %>%
   left_join(country_totals, by = c("name" = "Country"))
 
-#bar chart
+#Tuna metric ton bar chart
 bar_data <- country_totals %>%
   mutate(Country = reorder(Country, total_t))
 
-p1 <- ggplot(bar_data, aes(
-  x = Country,
-  y = total_t,
-  tooltip = Country,
-  data_id = Country,
-  fill = Country
-)) +
+p1 <- ggplot(bar_data, aes(x = Country, y = total_t, 
+                           tooltip = Country, #This pops up the country name when mouse hovers
+                           data_id = Country, #This connects the countries across the interactive plot
+                           fill = Country)) +
   geom_col_interactive() +
   coord_flip() +
   scale_fill_manual(values = country_colors) +
   scale_y_continuous(labels = scales::comma) +
   theme_minimal() +
   theme(
-    axis.title.x = element_blank(),
-    axis.title.y = element_blank(),
-    legend.position = "none"
-  )
+  axis.title.y = element_blank(),
+  axis.title.x = element_text(),
+  legend.position = "none"
+) +
+labs(y = "Total tuna (metric tons)") #Because we used coord_flip earlier, this is technically the y axis, not the x axis
 
-# Create the third chart (choropleth)
-world_sf <- world_sf %>%
-  left_join(data.2_filt, by = c("name" = "Country"))
 
-p2 <- ggplot() +
-  geom_sf(
-    data = world_sf,
-    fill = "lightgrey",
-    color = "lightgrey"
-  ) +
-  geom_sf_interactive(
-    data = filter(world_sf, !is.na(total_t)),
-    aes(
-      fill = name,
-      tooltip = name,
-      data_id = name
-    )
-  ) +
-  scale_fill_manual(values = country_colors) +
-  coord_sf(crs = st_crs(3857)) +
-  theme_void() +
-  theme(
-    legend.position = "none"
-  )
-
-#p3 species plot
+#p3 tuna species plot
 data.2_species <- data.2_filt %>%
   group_by(EspeciesSpecies, Country) %>%
   summarize(t = sum(t)) %>%
-  filter(EspeciesSpecies %in% c("BET", "YFT", "SKJ"))
+  filter(EspeciesSpecies %in% c("BET", "YFT", "SKJ")) #BET = Bigeye tuna, YFT = Yellowfin tuna, SKJ = Skipjack tuna
 
-p3 <- ggplot(
+p2 <- ggplot(
   data.2_species,
   aes(
     x = EspeciesSpecies,
-    y = t,
+    y = t, #tons of tuna
     fill = Country,
     group = Country,
-    tooltip = Country,
-    data_id = Country
-  )
-) +
+    tooltip = Country, #Pop up country name
+    data_id = Country #connecting the country data across the figures
+    )) +
   geom_col_interactive(position = "fill") +
   scale_color_manual(values = country_colors) +
   scale_y_continuous(labels = scales::comma) +
   theme_classic() +
-  theme(
-    legend.position = "none"
-  ) +
-  labs(
-    x = "Year",
-    y = "Total",
-    color = "Country"
-  )
+  theme(legend.position = "none") +
+  labs(x = "Year", y = "Total", color = "Country")
+
+# Create the third chart (map)
+world_sf <- world_sf %>%
+  left_join(data.2_filt, by = c("name" = "Country"))
+
+p3 <- ggplot() +
+  geom_sf(data = world_sf, fill = "lightgrey", color = "lightgrey") + #adding the map layer
+  geom_sf_interactive(data = filter(world_sf, !is.na(total_t)), #eliminating countries with NA values
+                      aes(fill = name, tooltip = name, data_id = name)) +
+  scale_fill_manual(values = country_colors) + #adding the country color pallet defined above
+  coord_sf(crs = st_crs(3857)) + # applying the WGS 84 projection, standard for full world map
+  theme_void() + #theme cleans up final fig
+  theme(legend.position = "none") #GET RID OF THAT LEGEND BLEH
 
 # Combine the plots
-combined_plot <- (p1 + p3) / p2 + plot_layout(heights = c(1, 2))
+combined_plot <- (p1 + p2) / p3 + plot_layout(heights = c(1, 2))
 
 # Create the interactive plot
 interactive_plot <- girafe(ggobj = combined_plot)
@@ -263,25 +242,16 @@ library(hrbrthemes)
 
 shark_species <- c(
   "FALn", "BSHn", "CCLn", "OCSn", "SEPNn",
-  "SKHn", "SPLn", "SPNn", "SPZn", "THRn"
-)
+  "SKHn", "SPLn", "SPNn", "SPZn", "THRn")
 
 shark_long <- shark_dat %>%
   mutate(Date = make_date(Year, Month, 1)) %>%
-  pivot_longer(
-    cols = all_of(shark_species),
-    names_to = "Species",
-    values_to = "Captures"
-  ) %>%
+  pivot_longer(cols = all_of(shark_species),
+               names_to = "Species",
+               values_to = "Captures") %>%
   group_by(Date, Species) %>%
-  summarise(
-    Captures = if (all(is.na(Captures))) {
-      NA_real_
-    } else {
-      sum(Captures, na.rm = TRUE)
-    },
-    .groups = "drop"
-  ) %>%
+  summarise(Captures = if (all(is.na(Captures))) {NA_real_} else {
+      sum(Captures, na.rm = TRUE)}, .groups = "drop") %>%
   mutate(
     Species = recode(
       Species,
@@ -294,49 +264,25 @@ shark_long <- shark_dat %>%
       "SPLn" = "Scalloped hammerhead",
       "SPNn" = "Smooth hammerhead",
       "SPZn" = "Great hammerhead",
-      "THRn" = "Thresher shark"
-    )
-  )
+      "THRn" = "Thresher shark"))
 
 plot <- ggplot(
   shark_long,
-  aes(
-    x = Date,
-    y = Captures,
-    color = Species,
-    group = Species,
-    tooltip = paste0(
-      "Species: ", Species
-    ),
-    data_id = interaction(Species, Date)
-  )
-) +
-  geom_line_interactive(
-  linewidth = 0.4,
-  hover_nearest = TRUE
-) +
-  scale_x_date(
-  date_breaks = "2 years",
-  date_labels = "%Y"
-)+
+  aes(x = Date, y = Captures, color = Species, group = Species, 
+      tooltip = paste0("Species: ", Species), data_id = interaction(Species, Date))) +
+  geom_line_interactive(linewidth = 0.4, hover_nearest = TRUE) +
+  facet_wrap(~Species) +
+  scale_x_date(date_breaks = "2 years", date_labels = "%Y")+
   scale_color_brewer(palette = "Paired") +
   theme_classic() +
-  theme(
-  legend.position = c(0.02, 0.98),
-  legend.justification = c(0, 1),
-  legend.background = element_rect(
-  fill = scales::alpha("white", 0.8),
-  color = NA
-  ),
-  legend.title = element_text(size = 10),
-  legend.text = element_text(size = 9)
-) +
+ # theme(legend.position = c(0.02, 0.98), legend.justification = c(0, 1), legend.background = element_rect(fill = scales::alpha("white", 0.8), color = NA),
+ # legend.title = element_text(size = 10),
+ # legend.text = element_text(size = 9)) +
   labs(
     x = "Year / Month",
     y = "Number of captures",
     color = "Shark species",
-    title = "Monthly shark captures by species"
-  )
+    title = "Monthly shark captures by species")
 
 interactive_plot <- girafe(ggobj = plot)
 
@@ -352,18 +298,91 @@ interactive_plot <- girafe_options(
 interactive_plot
 ```
 
+```{r}
+#| echo: false
+#| message: false
+#| warning: false
+
+shark_species <- c(
+  "FALn", "BSHn", "CCLn", "OCSn", "SEPNn",
+  "SKHn", "SPLn", "SPNn", "SPZn", "THRn")
+
+
+# Animate by year
+library(gganimate)
+library(gifski)
+
+shark_species <- c(
+  "FALn", "BSHn", "CCLn", "OCSn", "SEPNn",
+  "SKHn", "SPLn", "SPNn", "SPZn", "THRn"
+)
+
+# Pivot species while preserving spatial coordinates
+shark_long <- shark_dat %>%
+  pivot_longer(
+    cols = all_of(shark_species),
+    names_to = "Species",
+    values_to = "Captures"
+  ) %>%
+  filter(
+    !is.na(Captures),
+    Captures > 0,
+    as.numeric(as.character(Year)) > 2005
+  ) %>%
+  mutate(
+    Year = factor(Year, levels = sort(unique(Year))),
+    Species = recode(
+      Species,
+      "FALn" = "Silky shark",
+      "BSHn" = "Blue shark",
+      "CCLn" = "Blacktip shark",
+      "OCSn" = "Oceanic whitetip shark",
+      "SEPNn" = "Pelagic thresher shark",
+      "SKHn" = "Shortfin mako",
+      "SPLn" = "Scalloped hammerhead",
+      "SPNn" = "Smooth hammerhead",
+      "SPZn" = "Great hammerhead",
+      "THRn" = "Thresher shark"
+    )
+  )
+
+# Create animation
+plot <- ggplot() +
+  geom_sf(data = world_sf, fill = "lightgrey", color = "white") +
+  geom_point(
+    data = shark_long,
+    aes(x = LonC1, y = LatC1, color = Species), alpha = 0.3) +
+  facet_wrap(~Species) +
+  coord_sf(
+    xlim = c(-155, -60),
+    ylim = c(-30, 40),
+    expand = FALSE) +
+  theme_ipsum() +
+  labs(
+    title = "Year: {current_frame}",
+    x = "Longitude",
+    y = "Latitude",
+    color = "Shark species") +
+    theme(legend.position = "none") +
+  transition_manual(Year)
+
+animate(plot)
+```
 
 ## As the use of object sets increase, instances of shark bycatch increase
 ```{r}
 #| echo: false
 #| message: false
 #| warning: false
+#| eval: false
 
 # libraries:
 library(ggplot2)
 library(gganimate)
 library(hrbrthemes)
 library(viridis)
+library(gifski)
+library(tidyverse)
 
 shark_dat_settype <- read_csv("Data/PublicPSSharkSetType.csv") 
 shark_dat_setyear <- shark_dat_settype %>%
@@ -387,20 +406,26 @@ p <- ggplot(shark_long, aes(Year, Total, color = Species, group = Species)) +
   geom_line(linewidth = 1) +
   geom_point() +
   scale_color_manual(
-  values = c(
-    "total_silky" = "red",
-    "total_obj" = "black"
-  ),
-  labels = c(
-    "total_silky" = "Instances of silky shark capture",
-    "total_obj" = "Object sets"
-  )
-) +
-   theme_classic() +
+    values = c(
+      "total_silky" = "red",
+      "total_obj" = "black"
+    ),
+    labels = c(
+      "total_silky" = "Instances of silky shark capture",
+      "total_obj" = "Object sets"
+    )
+  ) +
+  theme_classic() +
   labs(x = "Year", y = "Total", color = NULL) +
   transition_reveal(Year)
 
-animate(p)
+animate(
+  p,
+  renderer = gifski_renderer(),
+  width = 900,
+  height = 600,
+  fps = 10
+)
 ```
 
 
