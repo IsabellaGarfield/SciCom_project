@@ -351,47 +351,6 @@ girafe(ggobj = tuna_map,
 ```
 
 
-#GARAGEE
-shark_species <- c(
-  "FALn", "BSHn", "CCLn", "OCSn", "SEPNn",
-  "SKHn", "SPLn", "SPNn", "SPZn", "THRn")
-
-shark_long <- shark_dat %>%
-  mutate(Date = make_date(Year, Month, 1)) %>%
-  pivot_longer(cols = all_of(shark_species),
-               names_to = "Species",
-               values_to = "Captures") %>%
-  group_by(Date, Species) %>%
-  summarise(Captures = if (all(is.na(Captures))) {NA_real_} else {
-      sum(Captures, na.rm = TRUE)}, .groups = "drop") %>%
-  mutate(
-    Species = recode(
-      Species,
-      "FALn" = "Silky shark",
-      "BSHn" = "Blue shark",
-      "CCLn" = "Blacktip shark",
-      "OCSn" = "Oceanic whitetip shark",
-      "SEPNn" = "Pelagic thresher shark",
-      "SKHn" = "Shortfin mako",
-      "SPLn" = "Scalloped hammerhead",
-      "SPNn" = "Smooth hammerhead",
-      "SPZn" = "Great hammerhead",
-      "THRn" = "Thresher shark"))
-
-species_order <- shark_long %>%
-  group_by(Species) %>%
-  summarise(
-    total_captures = sum(Captures, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  slice_max(order_by = total_captures, n = 5) %>%
-  pull(Species)
-
-shark_long <- shark_long %>%
-  mutate(Species = factor(Species, levels = species_order)) %>%
-  filter(!is.na(Species))
-
-
 ## Bycatch
 
 Tuna purse seine fisheries don't just catch tuna - sharks and rays represent key bycatch species that are often caught incidentally. Silky sharks make up 90% of all bycatch in the eastern Pacific purse seine fishery. Shark bycatch has increased with the use of object sets, because sharks are attracted to the fish that aggregate around floating objects for shelter. 
@@ -462,21 +421,39 @@ shark_long <- shark_long %>%
     Year = factor(Year, levels = sort(unique(Year)))
   )
 
+shark_yearly <- shark_long %>%
+  group_by(Year, Species) %>%
+  summarise(
+    Captures = sum(Captures, na.rm = TRUE),
+    .groups = "drop"
+  )
+
 plot <- ggplot(
-  shark_long,
-  aes(x = Date, y = Captures, color = Species, group = Species, 
-      tooltip = paste0("Species: ", Species), data_id = interaction(Species, Date))) +
+  shark_yearly,
+  aes(
+    x = as.numeric(as.character(Year)),
+    y = Captures,
+    color = Species,
+    group = Species,
+    tooltip = paste0(
+      "Species: ", Species,
+      "\nYear: ", Year,
+      "\nCaptures: ", Captures
+    ),
+    data_id = interaction(Species, Year)
+  )
+) +
   geom_line_interactive(linewidth = 0.4, hover_nearest = TRUE) +
-  facet_wrap(~Species, ncol = 1) +
-  scale_x_date(date_breaks = "2 years", date_labels = "%Y")+
+ # facet_wrap(~Species, ncol = 1) +
+  scale_x_continuous(breaks = scales::breaks_width(2)) + #skip x axis labels for every two years
   scale_color_brewer(palette = "Paired") +
   theme_classic() +
   theme(legend.position = "none") +
   labs(
     x = "Year",
-    y = "n",
-    color = "Shark species",
-    title = "Shark captures over time: Top 5 shark species")
+    y = "Number of captures",
+    title = "Shark captures over time: Top 5 shark species"
+  )
 
 interactive_plot <- girafe(
   ggobj = plot,
@@ -488,6 +465,7 @@ interactive_plot <- girafe(
     opts_toolbar(saveaspng = FALSE)
   )
 )
+
 
 interactive_plot
 
@@ -503,26 +481,39 @@ library(gganimate)
 library(gifski)
 
 
-
+# Create animation
 # Create animation
 plot <- ggplot() +
   geom_sf(data = world_sf, fill = "lightgrey", color = "white") +
   geom_point(
-    data = shark_long,
-    aes(x = LonC1, y = LatC1, color = Species), alpha = 0.3) +
+    data = shark_long %>%
+      filter(
+        !is.na(Captures),
+        Captures > 0,
+        !is.na(LonC1),
+        !is.na(LatC1)
+      ),
+    aes(x = LonC1, y = LatC1, color = Species),
+    alpha = 0.3,
+    size = 0.2
+  ) +
   facet_wrap(~Species) +
   coord_sf(
     xlim = c(-155, -60),
     ylim = c(-30, 40),
-    expand = FALSE) +
+    expand = FALSE
+  ) +
   theme_ipsum() +
   labs(
     title = "Year: {current_frame}",
     x = "Longitude",
     y = "Latitude",
-    color = "Shark species") +
-    theme(legend.position = "none") +
+    color = "Shark species"
+  ) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1),
+        legend.position = "none") +
   transition_manual(Year)
+
 plot
 animate(plot)
 ```

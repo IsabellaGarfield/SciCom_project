@@ -82,7 +82,7 @@ Coding the scroll-animated line graph requires three separate chunks: 1) data pr
 ```markdown
 # Reads the annual mobulid capture summary dataset from the Data folder.
 # This dataset contains the values used to populate the interactive chart.
-summary_data <- read.csv("Data/Mob_year_sum.csv")
+summary_data <- read.csv("Data/Mobulid/Mob_year_sum.csv")
 
 # Converts the R dataframe into JSON (JavaScript Object Notation),
 # a format that allows data to be transferred from R into JavaScript.
