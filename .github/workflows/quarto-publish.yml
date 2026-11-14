@@ -42,10 +42,11 @@ jobs:
             any::lubridate
             any::gganimate
             any::viridis
+            any::gifski
 
       - name: Check R packages
         run: |
-          Rscript -e 'library(knitr); library(rmarkdown); library(tidyverse); library(ggiraph); library(patchwork); library(sf); library(hrbrthemes); library(lubridate); library(gganimate); library(viridis); sessionInfo()'
+          Rscript -e 'library(knitr); library(rmarkdown); library(tidyverse); library(ggiraph); library(patchwork); library(sf); library(hrbrthemes); library(lubridate); library(gganimate); library(viridis); library(gifski); sessionInfo()'
 
       - name: Publish to GitHub Pages
         uses: quarto-dev/quarto-actions/publish@v2
