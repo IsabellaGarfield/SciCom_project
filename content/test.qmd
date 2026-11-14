@@ -15,8 +15,8 @@ Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse se
 
 library(jsonlite)
 
-mobulid_data <- read.csv("../Data/mob_set_summary.csv")
-set_data <- read.csv("../Data/sum_set_year.csv")
+mobulid_data <- read.csv("../Data/Mobulid/mob_set_summary.csv")
+set_data <- read.csv("../Data/Mobulid/sum_set_year.csv")
 
 chart_json <- toJSON(
   list(
