@@ -259,24 +259,20 @@ library(plotly)
 set_colors <- c("Object sets" = "#0072B2", "Non-associated sets" = "#D55E00", "Dolphin sets" = "#009E73") # using this to keep set-type colors consistent for the next two figures
 
 # Load your data
-data <- read_csv("Data/Mobulid/sum_set_year.csv")
-
+set_data <- read_csv("Data/Mobulid/sum_set_year.csv") %>%
+  filter(Year < 2025)
 
 # Create figure
-p <- ggplot(data, aes(x = Year)) +
+sets_over_time <- ggplot(set_data, aes(x = Year)) +
   geom_line(aes(y = OBJ, color = "Object sets")) +
   geom_line(aes(y = NOA, color = "Non-associated sets")) +
   geom_line(aes(y = DEL, color = "Dolphin sets")) +
   scale_color_manual(values = set_colors) +
-  labs(
-    title = "Trends of set-type use in the EPO tuna purse seine fishery",
-    x = "Year",
-    y = "Number of Sets",
-    color = "Set Type"
-  ) +
+  labs(title = "Trends of set-type use in the EPO tuna purse seine fishery",
+    x = "Year", y = "Number of Sets", color = "Set Type") +
   theme_classic()
 
-ggplotly(p)
+ggplotly(sets_over_time)
 ```
 
 \
@@ -296,54 +292,38 @@ library(tidyverse)
 library(ggiraph)
 library(maps)
 
-tuna <- read_csv("Data/Tuna/PublicPSTunaSetType.csv") %>% 
-  filter(Year > 2020)
-  
-#Have to pivot df long to plot multiple species on the same figure
-
-# Pivot dataframe to long format
-tuna_long <- tuna %>%
-  pivot_longer(
-    cols = c(YFT, SKJ, BET),
-    names_to = "Species",
-    values_to = "Catch"
-  ) %>%
+tuna <- read_csv("Data/Tuna/PublicPSTunaSetType.csv") %>%
   filter(
-    !is.na(Catch),
-    Catch > 0,
+    Year > 2010, #cutting data to clarify visual
     !is.na(LatC1),
     !is.na(LonC1)
   ) %>%
-  mutate(
-    Species = recode(
-      Species,
-      "YFT" = "Yellowfin tuna",
-      "SKJ" = "Skipjack tuna",
-      "BET" = "Bigeye tuna"
-    ),
-    SetType = factor(SetType, levels = c("OBJ", "DEL", "NOA"))
-  ) %>%
-  arrange(SetType)
-
+  mutate(SetType = factor(SetType, levels = c("OBJ", "DEL", "NOA"))) %>%
+  mutate(SetID = row_number()) %>%
+  mutate(total_mt = rowSums(across(c(YFT, SKJ, BET)), na.rm = TRUE))
+  
+#Have to pivot df long to plot multiple species on the same figure
 
 tuna_map <- ggplot() +
-  geom_polygon(data = map_data("world"), aes(x = long, y = lat, group = group), fill = "lightgrey", color = "white") +
-  geom_point_interactive( #This is essentially the same as coding with geom_point, the _interactive function allows the tooltip to create a hover pop-up
-    data = tuna_long,
-    aes(x = LonC1, y = LatC1, color = SetType, alpha = Catch,
-      tooltip = paste0( #This is the interactive hover portion of the code. This will set the following information when the mouse hovers over a data point (these variables are all separate columns in the df:
-        "\nCatch: ", scales::comma(Catch), " mt", # display MT of tuna captured
-         "\nSet Type: ", SetType), # Display set type
-      data_id = Species), size = 0.3) +
-  facet_wrap(~Species) + #creating three separate plots per species
- scale_color_manual(
-  values = c("NOA" = unname(set_colors["Non-associated sets"]), "OBJ" = unname(set_colors["Object sets"]), "DEL" = unname(set_colors["Dolphin sets"])), #linking the set-type color specific assignment from previous code chunk
-  labels = c("NOA" = "Non-associated", "OBJ" = "Object", "DEL" = "Dolphin"), name = "Set Type") + #Explicitly relabeling for figure output
-  coord_fixed(xlim = c(-155, -60), ylim = c(-30, 35), expand = FALSE) + #x y boundaries, expand = false removes extra white space around figure boundaires
-  theme_classic() + #theme_classic because it eliminates the axis lines extending across the plot
-  guides(color = guide_legend(override.aes = list(size = 3, alpha = 1))) + #Making the legend points bigger than the plotted point size
-  labs(title = "Distribution of tuna catch by species, set type, and metric tons (ggiraph)", x = "Longitude", y = "Latitude", color = "SetType") + #axis labels
-  scale_alpha(guide = "none") #Gets rid of the catch alpha legend
+  geom_polygon(data = map_data("world"), aes(x = long, y = lat, group = group), fill = "grey90", color = "white") +
+  geom_point_interactive(data = tuna,
+    aes(x = LonC1, y = LatC1, color = SetType, alpha = total_mt,
+    tooltip = paste0("Total tuna captured (mt): ", total_mt), data_id = SetID),
+    size = 0.2) +
+  scale_color_manual(
+    values = c("OBJ" = "#0072B2", "DEL" = "#D55E00", "NOA" = "#009E73"),
+    labels = c("OBJ" = "Object-associated","DEL" = "Dolphin-associated", "NOA" = "Non-associated"),
+    name = "Set type") +
+  coord_fixed(
+    xlim = c(-155, -60),
+    ylim = c(-30, 35),
+    expand = FALSE) +
+  facet_wrap(~SetType) +
+  theme_classic() +
+  theme(legend.position = "none") +
+  labs(title = "Geographic distribution of tuna fishing sets",
+    x = "Longitude", y = "Latitude")
+
 #now to animate with the interactive hover!
 girafe(ggobj = tuna_map, 
        width_svg = 10, height_svg = 4.5, width = 1, height = 0.45, #This is just to reduce figure spacing display in quarto
@@ -353,7 +333,7 @@ girafe(ggobj = tuna_map,
 
 ## Bycatch
 
-Tuna purse seine fisheries don't just catch tuna - sharks and rays represent key bycatch species that are often caught incidentally. Silky sharks make up 90% of all bycatch in the eastern Pacific purse seine fishery. Shark bycatch has increased with the use of object sets, because sharks are attracted to the fish that aggregate around floating objects for shelter. 
+Tuna purse seine fisheries don't just catch tuna. Sharks and rays represent key bycatch species that are often caught incidentally. Sharks are vulnerable due to their long life history traits, which can limit their ability to recovery from low population levels. While bycatch trends can indicate population declines, as most shark species have declined in catch over time, some population trends are more indicative of fleet dynamics. For example, the increase in silky shark bycatch is largely driven by the increase in the fleet's use of floating object sets (FADs). FADs tend to direct fishing effort further offshore into silky shark habitat. Further, silkies tend to be attracted to the aggregating ecology attracted to floating objects, increasing their fleet-selectivity. While silky sharks make up about 90% of the total bycatch abundance, they produce roughly one pup every 4 years, making them a bycatch species of particular concscern in this fishery. 
 
 ```{r}
 #| echo: false
@@ -374,15 +354,8 @@ shark_species <- c(
 
 # Pivot species while retaining the original set-level coordinates
 shark_long <- shark_dat %>%
-  mutate(
-    Date = make_date(Year, Month, 1),
-    Year = as.integer(Year)
-  ) %>%
-  pivot_longer(
-    cols = all_of(shark_species),
-    names_to = "Species",
-    values_to = "Captures"
-  ) %>%
+  mutate(Date = make_date(Year, Month, 1), Year = as.integer(Year)) %>%
+  pivot_longer(cols = all_of(shark_species), names_to = "Species", values_to = "Captures") %>%
   mutate(
     Species = recode(
       Species,
@@ -392,25 +365,16 @@ shark_long <- shark_dat %>%
       "OCSn" = "Oceanic whitetip shark",
       "SEPNn" = "Pelagic thresher shark",
       "SKHn" = "Shortfin mako",
-      "SPLn" = "Scalloped hammerhead",
+      "SPLn" = "Sc Hammerhead",
       "SPNn" = "Smooth hammerhead",
       "SPZn" = "Great hammerhead",
-      "THRn" = "Thresher shark"
-    )
-  )
+      "THRn" = "Thresher shark"))
 
 # Identify the top 5 species by total captures
 species_order <- shark_long %>%
   group_by(Species) %>%
-  summarise(
-    total_captures = sum(Captures, na.rm = TRUE),
-    .groups = "drop"
-  ) %>%
-  slice_max(
-    order_by = total_captures,
-    n = 5,
-    with_ties = FALSE
-  ) %>%
+  summarise(total_captures = sum(Captures, na.rm = TRUE), .groups = "drop") %>%
+  slice_max(order_by = total_captures, n = 5, with_ties = FALSE) %>%
   pull(Species)
 
 # Keep only the top 5 species
@@ -418,53 +382,38 @@ shark_long <- shark_long %>%
   filter(Species %in% species_order) %>%
   mutate(
     Species = factor(Species, levels = species_order),
-    Year = factor(Year, levels = sort(unique(Year)))
-  )
+    Year = factor(Year, levels = sort(unique(Year)))) 
 
 shark_yearly <- shark_long %>%
   group_by(Year, Species) %>%
-  summarise(
-    Captures = sum(Captures, na.rm = TRUE),
-    .groups = "drop"
-  )
+  summarise(Captures = sum(Captures, na.rm = TRUE), .groups = "drop")
 
 plot <- ggplot(
   shark_yearly,
-  aes(
-    x = as.numeric(as.character(Year)),
-    y = Captures,
-    color = Species,
-    group = Species,
+  aes(x = as.numeric(as.character(Year)), y = Captures, color = Species, group = Species)) + 
+   # tooltip = paste0("Species: ", Species, "\nYear: ", Year, "\nCaptures: ", Captures),
+   # data_id = interaction(Species, Year))) +
+  geom_line(linewidth = 0.4) +
+geom_point_interactive(aes(
     tooltip = paste0(
       "Species: ", Species,
       "\nYear: ", Year,
-      "\nCaptures: ", Captures
-    ),
-    data_id = interaction(Species, Year)
-  )
-) +
-  geom_line_interactive(linewidth = 0.4, hover_nearest = TRUE) +
+      "\nCaptures: ", scales::comma(Captures)),
+    data_id = interaction(Species, Year)),
+  size = 1.5) +
  # facet_wrap(~Species, ncol = 1) +
-  scale_x_continuous(breaks = scales::breaks_width(2)) + #skip x axis labels for every two years
+  scale_x_continuous(breaks = scales::breaks_width(2),
+                     limits = c(1995, 2024)) + #skip x axis labels for every two years
   scale_color_brewer(palette = "Paired") +
   theme_classic() +
   theme(legend.position = "none") +
-  labs(
-    x = "Year",
-    y = "Number of captures",
-    title = "Shark captures over time: Top 5 shark species"
-  )
+  labs(x = "Year", y = "Number of captures", title = "Shark captures over time: Top 5 shark species")
 
 interactive_plot <- girafe(
   ggobj = plot,
-  options = list(
-    opts_hover(
-      css = "stroke-width:3px; opacity:1; transition:all 0.3s ease;"
-    ),
+  options = list(opts_hover(css = "stroke-width:3px; opacity:1; transition:all 0.3s ease;"),
     opts_hover_inv(css = "opacity:0.15;"),
-    opts_toolbar(saveaspng = FALSE)
-  )
-)
+    opts_toolbar(saveaspng = FALSE)))
 
 
 interactive_plot
@@ -485,31 +434,13 @@ library(gifski)
 # Create animation
 plot <- ggplot() +
   geom_sf(data = world_sf, fill = "lightgrey", color = "white") +
-  geom_point(
-    data = shark_long %>%
-      filter(
-        !is.na(Captures),
-        Captures > 0,
-        !is.na(LonC1),
-        !is.na(LatC1)
-      ),
-    aes(x = LonC1, y = LatC1, color = Species),
-    alpha = 0.3,
-    size = 0.2
-  ) +
+  geom_point(data = shark_long %>%
+      filter(!is.na(Captures), Captures > 0, !is.na(LonC1), !is.na(LatC1)),
+    aes(x = LonC1, y = LatC1, color = Species), alpha = 0.3, size = 0.2) +
   facet_wrap(~Species) +
-  coord_sf(
-    xlim = c(-155, -60),
-    ylim = c(-30, 40),
-    expand = FALSE
-  ) +
+  coord_sf(xlim = c(-155, -60), ylim = c(-30, 40), expand = FALSE) +
   theme_ipsum() +
-  labs(
-    title = "Year: {current_frame}",
-    x = "Longitude",
-    y = "Latitude",
-    color = "Shark species"
-  ) +
+  labs(title = "Year: {current_frame}", x = "Longitude", y = "Latitude", color = "Shark species") +
   theme(axis.text.x = element_text(angle = 45, hjust = 1),
         legend.position = "none") +
   transition_manual(Year)
@@ -517,4 +448,4 @@ plot <- ggplot() +
 plot
 animate(plot)
 ```
-
+When it comes to bycatch, RFMOs tend to address bycatch after the capture has occured rather than preventing the initial capture. For example, IATTC provides best handling practices for captured shark release, which aims to reduce the proportion of sharks that die after a capture event. However, with increased use fishing methods that select for shark capture, continued impact on local populations will continue.
