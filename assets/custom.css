@@ -24,7 +24,7 @@ a {color: #2D7180;}
 .hero-image {
   position: absolute;
   inset: 0;
-  background-image: url("../images/Mob_capture.png");
+  background-image: url("../images/Silky_SOS.jpg");
   background-size: cover;
   background-position: center;
 }
@@ -75,7 +75,23 @@ a {color: #2D7180;}
   margin-left: calc(50% - 50vw);
 }
 
+/* Remove space between the text/image columns and the map */
+.tuna-description {
+  margin-bottom: 0 !important;
+  padding-bottom: 0 !important;
+}
 
+/* Remove space above the R code cell */
+.tuna-description + div.cell {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
+
+/* Remove space above the interactive plot output */
+.tuna-description + div.cell .cell-output {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}
 
 #mobulid-scroll-story {
   position: relative;
@@ -108,3 +124,5 @@ a {color: #2D7180;}
   border-radius: 6px;
   box-shadow: 0 2px 8px rgba(0,0,0,0.15);
 }
+
+
