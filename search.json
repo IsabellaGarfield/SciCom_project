@@ -32,21 +32,7 @@
     "href": "index.html#bycatch",
     "title": "Who is caught with your tuna?",
     "section": "Bycatch",
-    "text": "Bycatch\nTuna purse seine fisheries don’t just catch tuna - sharks and rays represent key bycatch species that are often caught incidentally. Silky sharks make up 90% of all bycatch in the eastern Pacific purse seine fishery. Shark bycatch has increased with the use of object sets, because sharks are attracted to the fish that aggregate around floating objects for shelter."
-  },
-  {
-    "objectID": "content/test.html",
-    "href": "content/test.html",
-    "title": "",
-    "section": "",
-    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
-  },
-  {
-    "objectID": "content/test.html#catch-trends",
-    "href": "content/test.html#catch-trends",
-    "title": "",
-    "section": "",
-    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
+    "text": "Bycatch\nTuna purse seine fisheries don’t just catch tuna. Sharks and rays represent key bycatch species that are often caught incidentally. Sharks are vulnerable due to their long life history traits, which can limit their ability to recovery from low population levels. While bycatch trends can indicate population declines, as most shark species have declined in catch over time, some population trends are more indicative of fleet dynamics. For example, the increase in silky shark bycatch is largely driven by the increase in the fleet’s use of floating object sets (FADs). FADs tend to direct fishing effort further offshore into silky shark habitat. Further, silkies tend to be attracted to the aggregating ecology attracted to floating objects, increasing their fleet-selectivity. While silky sharks make up about 90% of the total bycatch abundance, they produce roughly one pup every 4 years, making them a bycatch species of particular concscern in this fishery.\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nWhen it comes to bycatch, RFMOs tend to address bycatch after the capture has occured rather than preventing the initial capture. For example, IATTC provides best handling practices for captured shark release, which aims to reduce the proportion of sharks that die after a capture event. However, with increased use fishing methods that select for shark capture, continued impact on local populations will continue."
   },
   {
     "objectID": "content/About.html",
@@ -82,5 +68,19 @@
     "title": "How to use this template",
     "section": "_quarto.yml",
     "text": "_quarto.yml\nWhile the individual .qmd files (quarto pages) determine the content on each individual web page, the _quarto.yml serves as the ‘spine’ that binds the pages together (among other things…) so it is important to understand how to change this file to manipulate web page structure.I will link this resource as another helpful tool to navigate this document, but wanted to include some additional key notes:\n\nThis is a YAML document (“Yet Another Markup Language” can be finicky with syntax, use YAML Validator to check your code if running into issues)\n‘navbar:’ this is where you add, remove, or rearrange the individual web pages for your website. ‘href’ identifies the filepath to the .qmd page (quarto page), and ‘text’ identifies how you want the name to appear on the website.\n‘tools’: There is a globe icon and a github icon that appear on the page that you can assign links to. I use this to link the github’s specific repository so viewers can easily navigate to the corresponding code, and the globe icon links to the home page of the website.\n‘format’: you can change website themes (i.e. changing ‘cosmic’ to one of the many quarto options! For a fun one, try changing cosmic to ‘quartz’ to get a rainbow background theme :))"
+  },
+  {
+    "objectID": "content/test.html",
+    "href": "content/test.html",
+    "title": "",
+    "section": "",
+    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
+  },
+  {
+    "objectID": "content/test.html#catch-trends",
+    "href": "content/test.html#catch-trends",
+    "title": "",
+    "section": "",
+    "text": "Manta and Devil rays (mobulids) are captured as bycatch by the EPO tuna purse seine fishery. Catch rates have declined on average over time, possibly due to changes in fishing practices, reporting requirements, and/or declining populations."
   }
 ]
